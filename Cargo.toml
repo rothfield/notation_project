@@ -1,0 +1,12 @@
+# my-notation-project/Cargo.toml
+[workspace]
+members = [
+    "crates/notation-model",
+    "crates/canvas-gui-renderer",
+    "crates/wasm-bridge",
+]
+resolver = "2" # Recommended for modern workspaces
+
+[profile.release]
+lto = true
+opt-level = 'z' # Optimize for size
