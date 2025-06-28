@@ -168,11 +168,11 @@ impl Note {
     pub fn new(pitch_code: PitchCode) -> Self {
         Self {
             id: next_id(),
+            start_pos: 0,
             element_kind: ElementKind::Note,
             pitch_code,
             pitch_system: NotationKind::Number,
             original_text: String::new(),
-            start_pos: 0,
             octave: Octave::Middle,
             syllable: None, // Default to no syllable
         }
@@ -208,6 +208,44 @@ impl Line {
 }
 
 impl Composition {
+pub fn get_cursor(&mut self) -> (usize, usize) {
+        match &self.logical_cursor {
+            Some(cursor) => (cursor.line_index, cursor.element_index),
+            None => {
+                let i = self.lines.len() - 1;
+                let j = self.lines[i].elements.len();
+                self.logical_cursor = Some(Cursor {
+                    line_index: i,
+                    element_index: j,
+                    id: -1,
+                });
+                (i, j)
+            }
+        }
+    }
+
+
+       pub fn append_pitch(&mut self, pitch_code: PitchCode) {
+        // Step 1: Get cursor position (fallback to end of last line if None)
+        let (line_index, element_index) = self.get_cursor();
+
+        // Step 2: Construct Note with defaults
+        let mut note = Note::new(pitch_code);
+        note.start_pos = element_index;
+        let new_id = note.id;
+
+        // Step 3: Insert Note into line
+        let line = &mut self.lines[line_index];
+        line.elements.insert(element_index, Element::Note(note));
+
+        // Step 4: Advance the cursor
+        self.logical_cursor = Some(Cursor {
+            line_index,
+            element_index: element_index + 1,
+            id: new_id,
+        });
+    }
+
     pub fn new() -> Self {
         Self {
             id: next_id(),
@@ -323,16 +361,10 @@ fn test_happy_birthday_full2() {
     ];
 
     for (i, (pitch_code, octave, syllable)) in notes.iter().enumerate() {
-        let note = Note {
-            id: next_id(),
-            pitch_code: *pitch_code,
-            pitch_system: NotationKind::Number,
-            original_text: format!("{:?}", pitch_code),
-            start_pos: i,
-            element_kind: ElementKind::Note,
-            octave: *octave,
-            syllable: Some(syllable.to_string()),
-        };
+        let mut note = Note::new(*pitch_code);
+note.start_pos = i;
+note.octave = *octave;
+note.syllable = Some(syllable.to_string());
         elements.push(Element::Note(note));
 
         // Insert barline after every 6 notes
