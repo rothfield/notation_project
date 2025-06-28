@@ -10,5 +10,5 @@ notation-model = { path = "../notation-model" }
 
 # Add your graphics and font-handling libraries here.
 # These are examples based on our previous discussion.
-tiny-skia = "0.11"   # For 2D vector graphics and drawing to a pixel buffer.
+#   tiny-skia = "0.11"   # For 2D vector graphics and drawing to a pixel buffer.
 rusttype = "0.9"     # For loading fonts and laying out glyphs.

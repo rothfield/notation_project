@@ -1,0 +1,1 @@
+/home/john/projects/notation_project/target/debug/libcanvas_gui_renderer.rlib: /home/john/projects/notation_project/crates/canvas-gui-renderer/src/lib.rs /home/john/projects/notation_project/crates/notation-model/src/lib.rs /home/john/projects/notation_project/crates/notation-model/src/models.rs

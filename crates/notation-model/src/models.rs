@@ -57,6 +57,26 @@ impl Octave {
     }
 }
 
+impl Element {
+    pub fn get_id(&self) -> i32 {
+        match self {
+            Element::Note(n) => n.id,
+            Element::Dash(d) => d.id,
+            Element::Space(s) => s.id,
+            Element::Barline(b) => b.id,
+            Element::LeftBarline(b) => b.id,
+            Element::RightBarline(b) => b.id,
+            Element::FinalBarline(b) => b.id,
+            Element::LeftRepeat(r) => r.id,
+            Element::RightRepeat(r) => r.id,
+            Element::LeftSlur(s) => s.id,
+            Element::RightSlur(s) => s.id,
+            Element::Trill(t) => t.id,
+            Element::Turn(t) => t.id,
+            Element::Beat(b) => b.id,
+        }
+    }
+}
 // --- Model Structs ---
 
 #[derive(Debug, Clone)]
@@ -208,6 +228,116 @@ impl Line {
 }
 
 impl Composition {
+
+
+   pub fn cursor_right(&mut self) -> bool {
+        if let Some(cursor) = &mut self.logical_cursor {
+            if let Some(line) = self.lines.get(cursor.line_index) {
+                if cursor.element_index + 1 < line.elements.len() {
+                    cursor.element_index += 1;
+                    cursor.id = line.elements[cursor.element_index].get_id();
+                    return true;
+                } else if cursor.line_index + 1 < self.lines.len() {
+                    cursor.line_index += 1;
+                    cursor.element_index = 0;
+                    if let Some(next_line) = self.lines.get(cursor.line_index) {
+                        cursor.id = next_line.elements.get(0).map_or(-1, |e| e.get_id());
+                        return true;
+                    }
+                }
+            }
+        }
+        false
+    }
+
+    pub fn cursor_left(&mut self) -> bool {
+        if let Some(cursor) = &mut self.logical_cursor {
+            if cursor.element_index > 0 {
+                cursor.element_index -= 1;
+                if let Some(line) = self.lines.get(cursor.line_index) {
+                    cursor.id = line.elements[cursor.element_index].get_id();
+                    return true;
+                }
+            } else if cursor.line_index > 0 {
+                cursor.line_index -= 1;
+                if let Some(prev_line) = self.lines.get(cursor.line_index) {
+                    cursor.element_index = prev_line.elements.len().saturating_sub(1);
+                    cursor.id = prev_line.elements.get(cursor.element_index).map_or(-1, |e| e.get_id());
+                    return true;
+                }
+            }
+        }
+        false
+    }
+
+    pub fn cursor_up(&mut self) -> bool {
+        if let Some(cursor) = &mut self.logical_cursor {
+            if cursor.line_index > 0 {
+                cursor.line_index -= 1;
+                let new_line = &self.lines[cursor.line_index];
+                cursor.element_index = cursor.element_index.min(new_line.elements.len().saturating_sub(1));
+                cursor.id = new_line.elements.get(cursor.element_index).map_or(-1, |e| e.get_id());
+                return true;
+            }
+        }
+        false
+    }
+
+    pub fn cursor_down(&mut self) -> bool {
+        if let Some(cursor) = &mut self.logical_cursor {
+            if cursor.line_index + 1 < self.lines.len() {
+                cursor.line_index += 1;
+                let new_line = &self.lines[cursor.line_index];
+                cursor.element_index = cursor.element_index.min(new_line.elements.len().saturating_sub(1));
+                cursor.id = new_line.elements.get(cursor.element_index).map_or(-1, |e| e.get_id());
+                return true;
+            }
+        }
+        false
+    }
+
+    pub fn cursor_home(&mut self) -> bool {
+        if let Some(cursor) = &mut self.logical_cursor {
+            if let Some(line) = self.lines.get(cursor.line_index) {
+                if !line.elements.is_empty() {
+                    cursor.element_index = 0;
+                    cursor.id = line.elements[0].get_id();
+                    return true;
+                }
+            }
+        }
+        false
+    }
+
+    pub fn cursor_end(&mut self) -> bool {
+        if let Some(cursor) = &mut self.logical_cursor {
+            if let Some(line) = self.lines.get(cursor.line_index) {
+                if !line.elements.is_empty() {
+                    cursor.element_index = line.elements.len() - 1;
+                    cursor.id = line.elements[cursor.element_index].get_id();
+                    return true;
+                }
+            }
+        }
+        false
+    }
+
+    pub fn cursor_next_line(&mut self) -> bool {
+        if let Some(cursor) = &mut self.logical_cursor {
+            if cursor.line_index + 1 < self.lines.len() {
+                cursor.line_index += 1;
+                cursor.element_index = 0;
+                if let Some(line) = self.lines.get(cursor.line_index) {
+                    cursor.id = line.elements.get(0).map_or(-1, |e| e.get_id());
+                    return true;
+                }
+            }
+        }
+        false
+    }
+
+
+
 pub fn get_cursor(&mut self) -> (usize, usize) {
         match &self.logical_cursor {
             Some(cursor) => (cursor.line_index, cursor.element_index),
@@ -270,7 +400,7 @@ pub fn get_cursor(&mut self) -> (usize, usize) {
     pub fn set_title(&mut self, title: &str) { self.title = title.to_string(); }
     pub fn set_author(&mut self, author: &str) { self.author = author.to_string(); }
     pub fn add_line(&mut self, line: Line) { self.lines.push(line); }
-}
+    }
 
 // ===================================================================
 //                        TESTS
@@ -404,5 +534,58 @@ note.syllable = Some(syllable.to_string());
     };
 
     println!("{:#?}", composition);
+}
+
+#[test]
+fn test_happy_birthday_with_cursor_tracking() {
+    let mut comp = Composition::new();
+    comp.title = "Happy Birthday (Mixed)".into();
+
+    // Phrase 1: Use append_pitch() (cursor should update automatically)
+    comp.append_pitch(PitchCode::N5); // "Ha"
+    comp.append_pitch(PitchCode::N5); // "ppy"
+    comp.append_pitch(PitchCode::N6); // "birth"
+    comp.append_pitch(PitchCode::N5); // "day"
+    comp.append_pitch(PitchCode::N1); // "to"
+    comp.append_pitch(PitchCode::N7); // "you"
+
+    // Manually insert more notes into the same line
+    let line_index = comp.lines.len() - 1;
+    let line = &mut comp.lines[line_index];
+    let start_pos = line.elements.len();
+
+    let manual_notes = vec![
+        (PitchCode::N5, Octave::Low, "Ha"),
+        (PitchCode::N5, Octave::Low, "ppy"),
+        (PitchCode::N6, Octave::Low, "birth"),
+    ];
+
+    for (i, (pc, octave, syll)) in manual_notes.into_iter().enumerate() {
+        let mut note = Note::new(pc);
+        note.octave = octave;
+        note.syllable = Some(syll.to_string());
+        note.start_pos = start_pos + i;
+        let id = note.id;
+
+        line.elements.push(Element::Note(note));
+
+        // Update cursor manually
+        comp.logical_cursor = Some(Cursor {
+            line_index,
+            element_index: start_pos + i + 1,
+            id,
+        });
+    }
+
+    // Final cursor check
+    if let Some(cursor) = &comp.logical_cursor {
+        println!("Cursor: line={}, pos={}, id={}", cursor.line_index, cursor.element_index, cursor.id);
+        assert_eq!(cursor.line_index, line_index);
+        assert_eq!(cursor.element_index, line.elements.len());
+    } else {
+        panic!("Cursor should be present");
+    }
+
+    println!("{:#?}", comp);
 }
 
