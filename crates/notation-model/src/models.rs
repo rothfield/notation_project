@@ -1,5 +1,7 @@
 // src/models.rs
 
+#![allow(dead_code)]
+
 use std::sync::atomic::{AtomicI32, Ordering};
 use std::fmt;
 
@@ -8,6 +10,8 @@ static NEXT_ID: AtomicI32 = AtomicI32::new(1);
 fn next_id() -> i32 {
     NEXT_ID.fetch_add(1, Ordering::Relaxed)
 }
+
+
 
 // --- Enums ---
 
@@ -125,6 +129,14 @@ pub struct Line {
 }
 
 #[derive(Debug, Clone)]
+pub struct Cursor {
+    pub line_index: usize,
+    pub element_index: usize,
+    pub id: i32,
+}
+
+
+#[derive(Debug, Clone)]
 pub struct Composition {
     id: i32,
     element_kind: ElementKind,
@@ -132,7 +144,7 @@ pub struct Composition {
     author: String,
     header: Option<String>,
     footer: Option<String>,
-    last_cursor_element_id: Option<i32>,
+    pub logical_cursor: Option<Cursor>,
     notation_kind: NotationKind,
     lines: Vec<Line>,
 }
@@ -204,7 +216,7 @@ impl Composition {
             author: String::new(),
             header: None,
             footer: None,
-            last_cursor_element_id: None,
+            logical_cursor: None,
             notation_kind: NotationKind::Number,
             lines: vec![],
         }
@@ -215,7 +227,6 @@ impl Composition {
     pub fn author(&self) -> &str { &self.author }
     pub fn header(&self) -> &Option<String> { &self.header }
     pub fn footer(&self) -> &Option<String> { &self.footer }
-    pub fn last_cursor_element_id(&self) -> &Option<i32> { &self.last_cursor_element_id }
     pub fn notation_kind(&self) -> &NotationKind { &self.notation_kind }
     pub fn lines(&self) -> &Vec<Line> { &self.lines }
     pub fn set_title(&mut self, title: &str) { self.title = title.to_string(); }
@@ -267,3 +278,99 @@ mod tests {
         }
     }
 }
+
+
+
+#[test]
+fn test_happy_birthday_full2() {
+    let mut elements = vec![];
+
+    // Opening barline
+    elements.push(Element::LeftBarline(LeftBarline {
+        id: next_id(),
+        element_kind: ElementKind::LeftBarline,
+    }));
+
+    let notes = vec![
+        // Phrase 1: Happy birthday to you
+        (PitchCode::N5, Octave::Low, "Ha"),
+        (PitchCode::N5, Octave::Low, "ppy"),
+        (PitchCode::N6, Octave::Low, "birth"),
+        (PitchCode::N5, Octave::Low, "day"),
+        (PitchCode::N1, Octave::Middle, "to"),
+        (PitchCode::N7, Octave::Low, "you"),
+        // Barline
+        (PitchCode::N5, Octave::Low, "Ha"),
+        (PitchCode::N5, Octave::Low, "ppy"),
+        (PitchCode::N6, Octave::Low, "birth"),
+        (PitchCode::N5, Octave::Low, "day"),
+        (PitchCode::N2, Octave::Middle, "to"),
+        (PitchCode::N1, Octave::Middle, "you"),
+        // Barline
+        (PitchCode::N5, Octave::Low, "Ha"),
+        (PitchCode::N5, Octave::Low, "ppy"),
+        (PitchCode::N5, Octave::Upper, "birth"),
+        (PitchCode::N3, Octave::Middle, "day"),
+        (PitchCode::N1, Octave::Middle, "dear"),
+        (PitchCode::N7, Octave::Low, "friend"),
+        // Barline
+        (PitchCode::N4, Octave::Middle, "Ha"),
+        (PitchCode::N4, Octave::Middle, "ppy"),
+        (PitchCode::N3, Octave::Middle, "birth"),
+        (PitchCode::N1, Octave::Middle, "day"),
+        (PitchCode::N2, Octave::Middle, "to"),
+        (PitchCode::N1, Octave::Middle, "you"),
+    ];
+
+    for (i, (pitch_code, octave, syllable)) in notes.iter().enumerate() {
+        let note = Note {
+            id: next_id(),
+            pitch_code: *pitch_code,
+            pitch_system: NotationKind::Number,
+            original_text: format!("{:?}", pitch_code),
+            start_pos: i,
+            element_kind: ElementKind::Note,
+            octave: *octave,
+            syllable: Some(syllable.to_string()),
+        };
+        elements.push(Element::Note(note));
+
+        // Insert barline after every 6 notes
+        if (i + 1) % 6 == 0 && i < notes.len() - 1 {
+            elements.push(Element::Barline(Barline {
+                id: next_id(),
+                element_kind: ElementKind::Barline,
+            }));
+        }
+    }
+
+    // Final barline
+    elements.push(Element::FinalBarline(FinalBarline {
+        id: next_id(),
+        element_kind: ElementKind::FinalBarline,
+    }));
+
+    let line = Line {
+        id: next_id(),
+        element_kind: ElementKind::Line,
+        label: "verse 1".into(),
+        line_number: 1,
+        pitch_system: NotationKind::Number,
+        elements,
+    };
+
+    let composition = Composition {
+        id: next_id(),
+        element_kind: ElementKind::Composition,
+        title: "Happy Birthday (Corrected)".into(),
+        author: "Traditional".into(),
+        header: Some("🎂 Corrected pitch/octave test".into()),
+        footer: Some("End of song".into()),
+        notation_kind: NotationKind::Number,
+        logical_cursor: None,
+        lines: vec![line],
+    };
+
+    println!("{:#?}", composition);
+}
+
