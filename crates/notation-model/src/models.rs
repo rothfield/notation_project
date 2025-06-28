@@ -38,11 +38,7 @@ pub enum PitchCode {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Octave {
-    Lowest,
-    Low,
-    Middle,
-    Upper,
-    Highest,
+    Lowest, Low, Middle, Upper, Highest,
 }
 
 impl Octave {
@@ -56,7 +52,6 @@ impl Octave {
         }
     }
 }
-
 
 // --- Model Structs ---
 
@@ -95,15 +90,12 @@ pub struct Note {
     pub original_text: String,
     pub start_pos: usize,
     pub element_kind: ElementKind,
-    pub octave: Octave, // Updated to use the Octave enum
+    pub octave: Octave,
 }
 
 #[derive(Debug, Clone)]
 pub enum BeatElement {
-    Note(Note),
-    Dash(Dash),
-    LeftSlur(LeftSlur),
-    RightSlur(RightSlur),
+    Note(Note), Dash(Dash), LeftSlur(LeftSlur), RightSlur(RightSlur),
 }
 
 #[derive(Debug, Clone)]
@@ -170,7 +162,7 @@ impl Note {
             pitch_system: NotationKind::Number,
             original_text: String::new(),
             start_pos: 0,
-            octave: Octave::Middle, // Default to Middle
+            octave: Octave::Middle,
         }
     }
     pub fn id(&self) -> i32 { self.id }
@@ -186,4 +178,97 @@ impl Line {
 impl Composition {
     pub fn new(title: String, author: String, header: Option<String>, footer: Option<String>, last_cursor_element_id: Option<i32>, notation_kind: NotationKind, lines: Vec<Line>) -> Self { Self { id: next_id(), element_kind: ElementKind::Composition, title, author, header, footer, last_cursor_element_id, notation_kind, lines } }
     pub fn id(&self) -> i32 { self.id }
+}
+
+// ===================================================================
+//
+//                        TESTS
+//
+// ===================================================================
+
+#[cfg(test)]
+mod tests {
+    use super::*; // Import everything from the current file (models.rs)
+
+    #[test]
+    fn test_simplified_note_constructor_and_defaults() {
+        // The constructor now only requires a PitchCode
+        let note = Note::new(PitchCode::N5);
+
+        // Use the id() getter method, as the field is private
+        assert!(note.id() > 0);
+        assert_eq!(note.pitch_code, PitchCode::N5);
+        assert_eq!(note.element_kind, ElementKind::Note);
+
+        // Verify the new defaults
+        assert_eq!(note.octave, Octave::Middle);
+        assert_eq!(note.octave.as_i8(), 0);
+        assert!(matches!(note.pitch_system, NotationKind::Number));
+        assert_eq!(note.original_text, "");
+        assert_eq!(note.start_pos, 0);
+    }
+
+    #[test]
+    fn test_octave_enum_values() {
+        assert_eq!(Octave::Lowest.as_i8(), -2);
+        assert_eq!(Octave::Low.as_i8(), -1);
+        assert_eq!(Octave::Middle.as_i8(), 0);
+        assert_eq!(Octave::Upper.as_i8(), 1);
+        assert_eq!(Octave::Highest.as_i8(), 2);
+    }
+
+    #[test]
+    fn test_id_immutability_and_access() {
+        let barline = Barline::new();
+        let barline_id = barline.id();
+
+        // This line would cause a compile error, which is what we want:
+        // barline.id = 123;
+        // error[E0616]: field `id` of struct `Barline` is private
+
+        // We can only read the ID through the getter
+        assert!(barline_id > 0);
+    }
+
+    #[test]
+    fn test_sequential_ids_across_different_types() {
+        // Create a sequence of different elements
+        let note = Note::new(PitchCode::N1);
+        let dash = Dash::new();
+        let space = Space::new();
+        let trill = Trill::new();
+
+        // Check that the IDs are sequential and incrementing
+        assert_eq!(dash.id(), note.id() + 1);
+        assert_eq!(space.id(), dash.id() + 1);
+        assert_eq!(trill.id(), space.id() + 1);
+    }
+
+    #[test]
+    fn test_composition_with_elements() {
+        let line = Line::new(
+            "Verse 1".to_string(),
+            1,
+            NotationKind::Number,
+            vec![
+                Element::Note(Note::new(PitchCode::N1)),
+                Element::Note(Note::new(PitchCode::N2)),
+                Element::Note(Note::new(PitchCode::N3)),
+            ],
+        );
+
+        let composition = Composition::new(
+            "Song of Tests".to_string(),
+            "A. Developer".to_string(),
+            None,
+            None,
+            Some(line.id()),
+            NotationKind::Number,
+            vec![line],
+        );
+
+        assert!(composition.id() > 0);
+        assert_eq!(composition.lines.len(), 1);
+        assert_eq!(composition.last_cursor_element_id, Some(composition.lines[0].id()));
+    }
 }
