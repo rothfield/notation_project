@@ -1,6 +1,14 @@
+#![allow(dead_code)]
+
+#[derive(Debug, Clone)]
+pub struct LogicalCursor {
+    pub line_index: usize,
+    pub element_index: usize,
+    pub id: i32,
+}
+
 // src/models.rs
 
-#![allow(dead_code)]
 
 use std::sync::atomic::{AtomicI32, Ordering};
 use std::fmt;
@@ -164,7 +172,7 @@ pub struct Composition {
     author: String,
     header: Option<String>,
     footer: Option<String>,
-    pub cursor: Option<Cursor>,
+    pub logical_cursor: Option<Cursor>,
     notation_kind: NotationKind,
     lines: Vec<Line>,
 }
@@ -197,6 +205,19 @@ impl Note {
             syllable: None, // Default to no syllable
         }
     }
+    
+    pub fn newx(     ) -> Self {
+        Self {
+            id: next_id(),
+            start_pos: 0,
+            element_kind: ElementKind::Note,
+            pitch_code,
+            pitch_system: NotationKind::Number,
+            original_text: String::new(),
+            octave: Octave::Middle,
+            syllable: None, // Default to no syllable
+        }
+    }
     // Builder method to add a syllable
     pub fn with_syllable(mut self, syllable: &str) -> Self {
         self.syllable = Some(syllable.to_string());
@@ -210,7 +231,7 @@ impl Note {
 }
 
 impl Beat {
-    pub fn new(elements: Vec<BeatElement>, divisions: i32) -> Self { Self { id: next_id(), element_kind: ElementKind::Beat, elements, divisions } }
+    pub fn new() -> Self { Self { id: next_id(), element_kind: ElementKind::Beat, elements, divisions } }
     pub fn id(&self) -> i32 { self.id }
     pub fn element_kind(&self) -> ElementKind { self.element_kind }
     pub fn elements(&self) -> &Vec<BeatElement> { &self.elements }
@@ -218,7 +239,15 @@ impl Beat {
 }
 
 impl Line {
-    pub fn new(label: String, line_number: usize, pitch_system: NotationKind, elements: Vec<Element>) -> Self { Self { id: next_id(), element_kind: ElementKind::Line, label, line_number, pitch_system, elements } }
+    pub fn new() -> Self {
+        Line {
+            label: "".to_string(),
+            pitch_system: NotationKind::Number,
+            elements: vec![],
+            id: new_id(),
+            element_kind: ElementKind::Line,
+        }
+    }
     pub fn id(&self) -> i32 { self.id }
     pub fn element_kind(&self) -> ElementKind { self.element_kind }
     pub fn label(&self) -> &str { &self.label }
@@ -230,8 +259,8 @@ impl Line {
 impl Composition {
 
 
-    pub fn cursor_right(&mut self) -> bool {
-        if let Some(cursor) = &mut self.cursor {
+   pub fn cursor_right(&mut self) -> bool {
+        if let Some(cursor) = &mut self.logical_cursor {
             if let Some(line) = self.lines.get(cursor.line_index) {
                 if cursor.element_index + 1 < line.elements.len() {
                     cursor.element_index += 1;
@@ -251,7 +280,7 @@ impl Composition {
     }
 
     pub fn cursor_left(&mut self) -> bool {
-        if let Some(cursor) = &mut self.cursor {
+        if let Some(cursor) = &mut self.logical_cursor {
             if cursor.element_index > 0 {
                 cursor.element_index -= 1;
                 if let Some(line) = self.lines.get(cursor.line_index) {
@@ -271,7 +300,7 @@ impl Composition {
     }
 
     pub fn cursor_up(&mut self) -> bool {
-        if let Some(cursor) = &mut self.cursor {
+        if let Some(cursor) = &mut self.logical_cursor {
             if cursor.line_index > 0 {
                 cursor.line_index -= 1;
                 let new_line = &self.lines[cursor.line_index];
@@ -284,7 +313,7 @@ impl Composition {
     }
 
     pub fn cursor_down(&mut self) -> bool {
-        if let Some(cursor) = &mut self.cursor {
+        if let Some(cursor) = &mut self.logical_cursor {
             if cursor.line_index + 1 < self.lines.len() {
                 cursor.line_index += 1;
                 let new_line = &self.lines[cursor.line_index];
@@ -297,7 +326,7 @@ impl Composition {
     }
 
     pub fn cursor_home(&mut self) -> bool {
-        if let Some(cursor) = &mut self.cursor {
+        if let Some(cursor) = &mut self.logical_cursor {
             if let Some(line) = self.lines.get(cursor.line_index) {
                 if !line.elements.is_empty() {
                     cursor.element_index = 0;
@@ -310,7 +339,7 @@ impl Composition {
     }
 
     pub fn cursor_end(&mut self) -> bool {
-        if let Some(cursor) = &mut self.cursor {
+        if let Some(cursor) = &mut self.logical_cursor {
             if let Some(line) = self.lines.get(cursor.line_index) {
                 if !line.elements.is_empty() {
                     cursor.element_index = line.elements.len() - 1;
@@ -323,7 +352,7 @@ impl Composition {
     }
 
     pub fn cursor_next_line(&mut self) -> bool {
-        if let Some(cursor) = &mut self.cursor {
+        if let Some(cursor) = &mut self.logical_cursor {
             if cursor.line_index + 1 < self.lines.len() {
                 cursor.line_index += 1;
                 cursor.element_index = 0;
@@ -336,32 +365,31 @@ impl Composition {
         false
     }
 
-    pub fn get_cursor(&self) -> &Cursor {
-        self.cursor.as_ref().expect("cursor must exist")
+    pub fn get_cursor(&self) -> &LogicalCursor {
+        self.logical_cursor.as_ref().expect("logical_cursor must exist")
     }
 
-    pub fn get_cursor_mut(&mut self) -> &mut Cursor {
-        self.cursor.as_mut().expect("cursor must exist")
+    pub fn get_cursor_mut(&mut self) -> &mut LogicalCursor {
+        self.logical_cursor.as_mut().expect("logical_cursor must exist")
     }
 
 
 
-    pub fn append_pitch(&mut self, pitch_code: PitchCode) {
+       pub fn append_pitch(&mut self, pitch_code: PitchCode) {
         // Step 1: Get cursor position (fallback to end of last line if None)
-        let cursor = self.get_cursor();
-        let line_index = cursor.line_index;
-        let element_index = cursor.element_index;
+        let (line_index, element_index) = self.get_cursor();
+
         // Step 2: Construct Note with defaults
         let mut note = Note::new(pitch_code);
-        note.start_pos = element_index;
+        note.start_pos = *element_index;
         let new_id = note.id;
 
         // Step 3: Insert Note into line
-        let line = &mut self.lines[line_index];
+        let line = &mut self.lines[*line_index];
         line.elements.insert(element_index, Element::Note(note));
 
         // Step 4: Advance the cursor
-        self.cursor = Some(Cursor {
+        self.logical_cursor = Some(Cursor {
             line_index,
             element_index: element_index + 1,
             id: new_id,
@@ -376,7 +404,7 @@ impl Composition {
             author: String::new(),
             header: None,
             footer: None,
-            cursor: None,
+            logical_cursor: None,
             notation_kind: NotationKind::Number,
             lines: vec![],
         }
@@ -392,8 +420,244 @@ impl Composition {
     pub fn set_title(&mut self, title: &str) { self.title = title.to_string(); }
     pub fn set_author(&mut self, author: &str) { self.author = author.to_string(); }
     pub fn add_line(&mut self, line: Line) { self.lines.push(line); }
-}
+    }
 
 // ===================================================================
 //                        TESTS
 // ===================================================================
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_create_happy_birthday_with_lyrics() {
+        let mut composition = Composition::new();
+        composition.set_title("Happy Birthday");
+
+        // Line 1: "Happy birthday to you" (C C D C F E)
+        let line1 = Line::new(
+            "Line 1".to_string(),
+            1,
+            NotationKind::Number,
+            vec![
+                Element::Note(Note::new(PitchCode::N1).with_syllable("Hap-")),
+                Element::Note(Note::new(PitchCode::N1).with_syllable("py")),
+                Element::Note(Note::new(PitchCode::N2).with_syllable("birth-")),
+                Element::Note(Note::new(PitchCode::N1).with_syllable("day")),
+                Element::Note(Note::new(PitchCode::N4).with_syllable("to")),
+                Element::Note(Note::new(PitchCode::N3).with_syllable("you")),
+            ],
+        );
+
+        composition.add_line(line1);
+
+        assert_eq!(composition.title(), "Happy Birthday");
+        assert_eq!(composition.lines().len(), 1);
+        
+        let first_line_elements = composition.lines()[0].elements();
+        assert_eq!(first_line_elements.len(), 6);
+
+        // Check the first note to ensure the syllable was set correctly
+        if let Element::Note(note) = &first_line_elements[0] {
+            assert_eq!(note.syllable(), Some(&"Hap-".to_string()));
+        } else {
+            panic!("Expected the first element to be a Note");
+        }
+    }
+}
+
+
+
+#[test]
+fn test_happy_birthday_full2() {
+    let mut elements = vec![];
+
+    // Opening barline
+    elements.push(Element::LeftBarline(LeftBarline {
+        id: next_id(),
+        element_kind: ElementKind::LeftBarline,
+    }));
+
+    let notes = vec![
+        // Phrase 1: Happy birthday to you
+        (PitchCode::N5, Octave::Low, "Ha"),
+        (PitchCode::N5, Octave::Low, "ppy"),
+        (PitchCode::N6, Octave::Low, "birth"),
+        (PitchCode::N5, Octave::Low, "day"),
+        (PitchCode::N1, Octave::Middle, "to"),
+        (PitchCode::N7, Octave::Low, "you"),
+        // Barline
+        (PitchCode::N5, Octave::Low, "Ha"),
+        (PitchCode::N5, Octave::Low, "ppy"),
+        (PitchCode::N6, Octave::Low, "birth"),
+        (PitchCode::N5, Octave::Low, "day"),
+        (PitchCode::N2, Octave::Middle, "to"),
+        (PitchCode::N1, Octave::Middle, "you"),
+        // Barline
+        (PitchCode::N5, Octave::Low, "Ha"),
+        (PitchCode::N5, Octave::Low, "ppy"),
+        (PitchCode::N5, Octave::Upper, "birth"),
+        (PitchCode::N3, Octave::Middle, "day"),
+        (PitchCode::N1, Octave::Middle, "dear"),
+        (PitchCode::N7, Octave::Low, "friend"),
+        // Barline
+        (PitchCode::N4, Octave::Middle, "Ha"),
+        (PitchCode::N4, Octave::Middle, "ppy"),
+        (PitchCode::N3, Octave::Middle, "birth"),
+        (PitchCode::N1, Octave::Middle, "day"),
+        (PitchCode::N2, Octave::Middle, "to"),
+        (PitchCode::N1, Octave::Middle, "you"),
+    ];
+
+    for (i, (pitch_code, octave, syllable)) in notes.iter().enumerate() {
+        let mut note = Note::new(*pitch_code);
+note.start_pos = i;
+note.octave = *octave;
+note.syllable = Some(syllable.to_string());
+        elements.push(Element::Note(note));
+
+        // Insert barline after every 6 notes
+        if (i + 1) % 6 == 0 && i < notes.len() - 1 {
+            elements.push(Element::Barline(Barline {
+                id: next_id(),
+                element_kind: ElementKind::Barline,
+            }));
+        }
+    }
+
+    // Final barline
+    elements.push(Element::FinalBarline(FinalBarline {
+        id: next_id(),
+        element_kind: ElementKind::FinalBarline,
+    }));
+
+    let line = Line {
+        id: next_id(),
+        element_kind: ElementKind::Line,
+        label: "verse 1".into(),
+        line_number: 1,
+        pitch_system: NotationKind::Number,
+        elements,
+    };
+
+    let composition = Composition {
+        id: next_id(),
+        element_kind: ElementKind::Composition,
+        title: "Happy Birthday (Corrected)".into(),
+        author: "Traditional".into(),
+        header: Some("🎂 Corrected pitch/octave test".into()),
+        footer: Some("End of song".into()),
+        notation_kind: NotationKind::Number,
+        logical_cursor: None,
+        lines: vec![line],
+    };
+
+    println!("{:#?}", composition);
+}
+
+#[test]
+fn test_happy_birthday_with_cursor_tracking() {
+    let mut comp = Composition::new();
+    comp.title = "Happy Birthday (Mixed)".into();
+
+    // Phrase 1: Use append_pitch() (cursor should update automatically)
+    comp.append_pitch(PitchCode::N5); // "Ha"
+    comp.append_pitch(PitchCode::N5); // "ppy"
+    comp.append_pitch(PitchCode::N6); // "birth"
+    comp.append_pitch(PitchCode::N5); // "day"
+    comp.append_pitch(PitchCode::N1); // "to"
+    comp.append_pitch(PitchCode::N7); // "you"
+
+    // Manually insert more notes into the same line
+    let line_index = comp.lines.len() - 1;
+    let line = &mut comp.lines[*line_index];
+    let start_pos = line.elements.len();
+
+    let manual_notes = vec![
+        (PitchCode::N5, Octave::Low, "Ha"),
+        (PitchCode::N5, Octave::Low, "ppy"),
+        (PitchCode::N6, Octave::Low, "birth"),
+    ];
+
+    for (i, (pc, octave, syll)) in manual_notes.into_iter().enumerate() {
+        let mut note = Note::new(pc);
+        note.octave = octave;
+        note.syllable = Some(syll.to_string());
+        note.start_pos = start_pos + i;
+        let id = note.id;
+
+        line.elements.push(Element::Note(note));
+
+        // Update cursor manually
+        comp.logical_cursor = Some(Cursor {
+            line_index,
+            element_index: start_pos + i + 1,
+            id,
+        });
+    }
+
+    // Final cursor check
+    if let Some(cursor) = &comp.logical_cursor {
+        println!("Cursor: line={}, pos={}, id={}", cursor.line_index, cursor.element_index, cursor.id);
+        assert_eq!(cursor.line_index, line_index);
+        assert_eq!(cursor.element_index, line.elements.len());
+    } else {
+        panic!("Cursor should be present");
+    }
+
+    println!("{:#?}", comp);
+}
+
+#[test]
+fn cursor_navigation_with_edge_cases() {
+    use super::*;
+
+    let mut comp = Composition::new("Cursor Edge Cases");
+
+    // Line 0: two notes
+    comp.append_pitch(PitchCode::N1);
+    comp.append_pitch(PitchCode::N2);
+
+    // Line 1: empty
+    comp.lines.push(Line::new());
+
+    // Line 2: two notes
+    comp.lines.push(Line::new());
+    comp.get_cursor().as_mut().unwrap().line_index = 2;
+    comp.get_cursor().as_mut().unwrap().element_index = 0;
+    comp.append_pitch(PitchCode::N3);
+    comp.append_pitch(PitchCode::N4);
+
+    // Ensure cursor is at N4
+    let cursor = comp.get_cursor().clone();
+    assert_eq!(cursor.line_index, 2);
+    assert_eq!(cursor.element_index, 1);
+
+    // cursor_home → 0
+    comp.cursor_home();
+    assert_eq!(comp.get_cursor().element_index, 0);
+
+    // cursor_end → 1
+    comp.cursor_end();
+    assert_eq!(comp.get_cursor().element_index, 1);
+
+    // cursor_down at bottom → no move
+    assert!(!comp.cursor_down(), "Should not move below last line");
+    assert_eq!(comp.get_cursor().line_index, 2);
+
+    // cursor_up to line 1 → line 1 is empty → no move
+    comp.cursor_up();
+    assert_eq!(comp.get_cursor().line_index, 2, "Should stay on line 2");
+
+    // cursor_up to line 0 (which has 2 notes) → column 1 exists
+    comp.cursor_up();
+    assert_eq!(comp.get_cursor().line_index, 0);
+    assert_eq!(comp.get_cursor().element_index, 1);
+
+    // cursor_up at top → no move
+    assert!(!comp.cursor_up(), "Should not move above line 0");
+    assert_eq!(comp.get_cursor().line_index, 0);
+}
+
+
