@@ -1,0 +1,20 @@
+# Ignore user-specified files and directories
+.env
+**/*.bak
+**/attic/
+**/*.tar
+**/*.tgz
+**/*.zip
+
+# Ignore Rust build artifacts
+/target/
+*.rs.bk
+
+# Ignore JavaScript dependencies
+/node_modules/
+
+# Ignore common editor and OS files
+.vscode/
+.idea/
+*.swp
+*~
