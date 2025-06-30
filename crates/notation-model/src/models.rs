@@ -1,4 +1,4 @@
-// src/models.rs
+// src/modelss
 
 #![allow(dead_code)]
 
@@ -210,7 +210,12 @@ impl Note {
 }
 
 impl Beat {
-    pub fn new(elements: Vec<BeatElement>, divisions: i32) -> Self { Self { id: next_id(), element_kind: ElementKind::Beat, elements, divisions } }
+    pub fn new() -> Self 
+    { Self { id: next_id(), element_kind: ElementKind::Beat, 
+            elements: Vec::new(),
+               divisions: 0,
+           }
+    }
     pub fn id(&self) -> i32 { self.id }
     pub fn element_kind(&self) -> ElementKind { self.element_kind }
     pub fn elements(&self) -> &Vec<BeatElement> { &self.elements }
@@ -218,7 +223,18 @@ impl Beat {
 }
 
 impl Line {
-    pub fn new(label: String, line_number: usize, pitch_system: NotationKind, elements: Vec<Element>) -> Self { Self { id: next_id(), element_kind: ElementKind::Line, label, line_number, pitch_system, elements } }
+
+  pub fn new() -> Self {
+        Line {
+            id: next_id(),
+            element_kind: ElementKind::Line,
+            label: String::new(),
+            line_number: 0,
+            pitch_system: NotationKind::Number,
+            elements: Vec::new(),
+        }
+    }
+
     pub fn id(&self) -> i32 { self.id }
     pub fn element_kind(&self) -> ElementKind { self.element_kind }
     pub fn label(&self) -> &str { &self.label }
