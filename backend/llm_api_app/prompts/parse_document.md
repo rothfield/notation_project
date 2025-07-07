@@ -243,3 +243,8 @@ blocks:
 
 **Your output must be strictly valid YAML and include only the parsed document
 structure.**
+
+
+**Begin parsing the following raw document content:**
+
+[Insert Raw Document Content Here]
