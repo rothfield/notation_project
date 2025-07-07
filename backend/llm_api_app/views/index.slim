@@ -1,0 +1,17 @@
+doctype html
+html
+  head
+    meta charset="UTF-8"
+    title LLM API App
+  body
+    h1 LLM API App
+
+    - if result
+      h2 LLM Parse Result:
+      pre= result
+
+    form action="/parse" method="post"
+      textarea name="notation" rows="10" cols="40"
+        = notation
+      br
+      button Parse
