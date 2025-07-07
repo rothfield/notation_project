@@ -1,17 +1,47 @@
 doctype html
-html
+html lang="en"
   head
     meta charset="UTF-8"
-    title LLM API App
+    meta name="viewport" content="width=device-width, initial-scale=1"
+    title Letter Notation Parser
+    link rel="stylesheet" href="styles.css?v=1748537421x"
+    link rel="stylesheet" href="composition.css?v=1748537421x"
+    link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet"
   body
-    h1 LLM API App
+    .container
+      h1 Letter Notation Parser
 
-    - if result
-      h2 LLM Parse Result:
-      pre= result
+      p
+        a href="parse_document_final_prompt.md" download
+          | 📄 Download Document Parser Prompt (Markdown)
 
-    form action="/parse" method="post"
-      textarea name="notation" rows="10" cols="40"
-        = notation
-      br
-      button Parse
+      #connection-status Connected
+
+      form(action="/parse" method="post")
+        textarea#editor(name="notation" rows="10" cols="40" placeholder="Type your letter notation here...")= notation
+        br
+        button(type="submit") Parse
+
+      #sections
+        .section
+          h2 Rendered Notation
+          #html-output.composition
+        .section
+          h2 HTML
+          pre#html-raw.output
+        .section
+          h2 Parse Tree Structure
+          pre#output-content.output
+        .section
+          h2 LilyPond Source Code
+          pre#lilypond-content.output
+        .section
+          h2 Staff Notation (SVG)
+          #svg-container.svg-output
+
+      - if result
+        h2 LLM Parse Result:
+        pre= result
+
+    //- Uncomment the next line to enable JS live updates (WebSocket)
+    // script src="main.js?v=1748544917"

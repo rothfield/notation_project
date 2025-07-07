@@ -1,0 +1,94 @@
+/* Base styles - Mobile First */
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: #fff;
+  color: #111;
+  line-height: 1.5;
+}
+
+.container {
+  width: 100%;
+  padding: 1em;
+  box-sizing: border-box;
+}
+
+h1 {
+  font-size: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+h2 {
+  font-size: 1.2em;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
+}
+
+textarea#editor {
+  width: 100%;
+  font-family: monospace;
+  font-size: 1em;
+  padding: 0.5em;
+  box-sizing: border-box;
+  resize: vertical;
+  min-height: 6em;
+  margin-bottom: 1em;
+}
+
+#connection-status {
+  font-size: 0.85em;
+  margin-bottom: 0.5em;
+  color: green;
+}
+
+section {
+  margin-bottom: 1.5em;
+}
+
+pre.output {
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  background: #f8f8f8;
+  padding: 0.75em;
+  border-radius: 5px;
+  font-family: monospace;
+  font-size: 0.9em;
+  overflow-x: auto;
+}
+
+/* Responsive layout for larger screens */
+@media (min-width: 768px) {
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  textarea#editor {
+    min-height: 10em;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: none;
+    width: 100%;
+    padding: 1em;
+  }
+
+  .section {
+    padding: 1em;
+    margin-bottom: 1.5em;
+  }
+
+  #sections {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5em;
+  }
+
+  #sections > .section {
+    flex: 1 1 45%; /* Two columns on wide screens */
+  }
+}
+
