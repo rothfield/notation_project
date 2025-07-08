@@ -8,24 +8,26 @@ require 'httparty'
 # Serve static files from ./public
 set :public_folder, 'public'
 
-
-#begin call_llm_api#
-def call_llm_api(prompt)
-  HTTParty.post("https://api.openai.com/v1/chat/completions",
-    headers: {
-      "Content-Type" => "application/json",
-      "Authorization" => "Bearer #{ENV['LLM_API_KEY']}"
-    },
-    body: {
-      model: "gpt-3.5-turbo",
-      messages: [
-        { role: "system", content: "You are a helpful assistant." },
-        { role: "user", content: prompt }
-      ]
-    }.to_json
-  )
+#begin helpers#
+helpers do
+  def call_LLM_API(prompt)
+    # call the api with the prompt; return result
+    HTTParty.post("https://api.openai.com/v1/chat/completions",
+      headers: {
+        "Content-Type" => "application/json",
+        "Authorization" => "Bearer #{ENV['LLM_API_KEY']}"
+      },
+      body: {
+        model: "gpt-3.5-turbo",
+        messages: [
+          { role: "system", content: "You are a helpful assistant." },
+          { role: "user", content: prompt }
+        ]
+      }.to_json
+    )
+  end
 end
-#end call_llm_api#
+#end helpers#
 
 #begin parse_route#
 post '/zzzparse' do
@@ -34,14 +36,14 @@ post '/zzzparse' do
   notation = params[:notation] || ""
 
   # Stage 1: Parse full document
-  document = call_llm_parse_document(notation) # returns YAML as string
+  document = call_LLM_parse_document(notation) # returns YAML as string
 
   doc_hash = YAML.safe_load(document)
   blocks = doc_hash['blocks'] || []
 
   # Stage 2: Tokenize each block
   parsed_blocks = blocks.map do |block|
-    call_llm_tokenize_block(block)
+    call_LLM_tokenize_block(block)
   end
   puts "******"
   puts parsed_blocks
@@ -74,15 +76,19 @@ post '/parse' do
   # Combine the prompt template with the user's notation
   # The prompt template includes a placeholder like "[Insert Raw Document Content Here]"
   # We replace this placeholder with the actual user_input_notation.
-  full_llm_prompt = prompt_template_content.gsub("[Insert Raw Document Content Here]", user_input_notation)
-  puts full_llm_prompt
-  # Call the LLM API with the combined prompt
-  response = call_llm_api(full_llm_prompt)
+  full_LLM_prompt = prompt_template_content.gsub("[Insert Raw Document Content Here]", user_input_notation)
+  puts full_LLM_prompt if false
+  puts "Calling LLM "
+  response = call_LLM_API(full_LLM_prompt)
   parse_results = response.parsed_response
-   puts "llm_output"
+   puts "****LLM_output***"
    puts parse_results
    # Render the slim template with the LLM's response
     result = parse_results["choices"][0]["message"]["content"]  # get YAML strin
+    puts
+    puts "****yaml of parsed document"
+    puts result
+    puts
    slim :index, locals: { result: result, notation: user_input_notation }
 end
 # ####end parse_route####
@@ -112,3 +118,5 @@ end
 get '/tokenize_block.md' do
   send_file File.join(settings.root, 'prompts', 'tokenize_block.md')
 end
+#end get_tokenize_block_prompt#
+

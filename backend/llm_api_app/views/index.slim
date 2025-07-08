@@ -12,7 +12,7 @@ html lang="en"
       h1 Letter Notation Parser
 
       p
-        a href="parse_document_final_prompt.md" download
+        a href="parse_document_prompt.md" download
           | 📄 Download Document Parser Prompt (Markdown)
 
       #connection-status Connected
@@ -23,6 +23,9 @@ html lang="en"
         button(type="submit") Parse
 
       #sections
+      - if result
+        h2 LLM Parse Result:
+        pre= result
         .section
           h2 Rendered Notation
           #html-output.composition
@@ -39,9 +42,6 @@ html lang="en"
           h2 Staff Notation (SVG)
           #svg-container.svg-output
 
-      - if result
-        h2 LLM Parse Result:
-        pre= result
 
     //- Uncomment the next line to enable JS live updates (WebSocket)
     // script src="main.js?v=1748544917"

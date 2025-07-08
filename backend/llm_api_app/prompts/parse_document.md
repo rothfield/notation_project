@@ -56,6 +56,7 @@ footer.
   separators. Preserve each block’s original formatting exactly.  
   **Do not attempt to extract or interpret metadata from within blocks;** treat
   all content inside blocks as raw text.
+  - If there are no blank lines, the entire input is treated as a single block.
 
 - **Formatting and Whitespace Preservation:**  
   All paragraph blocks **must** use YAML literal block scalar style (`|` or
@@ -78,6 +79,7 @@ footer.
   Any contiguous sequence of one or more blank lines between blocks should be
   treated as a single separator: each contiguous group of non-blank lines forms
   a block. Multiple blank lines do not create empty blocks or affect splitting.
+  - If there are no blank lines, the entire input is treated as a single block.
 
 ---
 
@@ -241,10 +243,31 @@ blocks:
 
 ---
 
+### Example 6: All Lines One Block (No Blank Lines)
+
+**Input:**
+```
+this
+is
+paragraph
+```
+
+**Output:**
+```yaml
+blocks:
+  - |-
+    this
+    is
+    paragraph
+```
+
+---
+
 **Your output must be strictly valid YAML and include only the parsed document
 structure.**
 
 
-**Begin parsing the following raw document content:**
 
-[Insert Raw Document Content Here]
+**Begin parsing the following raw document content:**
+ 
+-[Insert Raw Document Content Here]
