@@ -1,0 +1,60 @@
+# Tokenize Block Prompt
+
+You are a specialist YAML generator. Your ONLY task is to parse lines of letter music notation into a structured YAML format.
+
+**CRITICAL RULE: Your output MUST be valid YAML and nothing else. Do not add explanations, markdown, or any text outside of the YAML structure.**
+
+**Task:**
+Given a single block of letter notation, output a strict token-level parse in **YAML format**.
+
+**Instructions:**
+- The top-level keys MUST be `upper_lines`, `main_line`, and `lower_lines`.
+- Each of these keys holds a list of lines.
+- Each line is a mapping with a `tokens` list.
+- Each token in the `tokens` list MUST be a mapping with the following keys:
+    - `type`: (e.g., note, barline, dot, dash, syllable, text, space, etc.)
+    - `line`: (0-based index within the block)
+    - `column`: (character position)
+    - For `note` types, you MUST include a `pitch` key. The `pitch` is the character of the note itself, preserving its original case (e.g., s, R, g).
+    - For `syllable` or `text` types, add a `text` key.
+    - For `space` or `dash` types, add a `length` key.
+
+**Example of the ONLY valid output format:**
+
+```yaml
+main_line:
+  - tokens:
+      - type: note
+        line: 1
+        column: 0
+        pitch: S
+      - type: space
+        line: 1
+        column: 1
+        length: 1
+      - type: note
+        line: 1
+        column: 2
+        pitch: R
+upper_lines:
+  - tokens:
+      - type: dot
+        line: 0
+        column: 2
+lower_lines:
+  - tokens:
+      - type: syllable
+        line: 3
+        column: 0
+        text: hi
+```
+
+**Negative Constraint:**
+- **NEVER** output in a plaintext, indented tree format.
+- **NEVER** add conversational text or explanations.
+- **NEVER** wrap the YAML in markdown fences like ```.
+
+---
+**Begin parsing the following block into YAML:**
+
+-[Insert Raw Document Content Here]

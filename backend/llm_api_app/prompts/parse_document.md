@@ -44,9 +44,7 @@ footer.
 
 - **Headers and Footers:**  
   Use your best judgment and contextual reasoning to determine the document’s
-  header and footer sections, and to detect metadata fields (such as `title`,
-  `author`, `date`, etc.) whether they are explicitly labeled or implied by
-  context and formatting. Human-created documents may be informal or
+  header and footer sections. A line should only be considered a header if it contains explicit keywords (e.g., "Title:", "Author:") or is clearly written in a natural language like English or Hindi. **If a line does not appear to be written in a natural language, treat it as a content block, not a header.** Human-created documents may be informal or
   inconsistent; interpret these sections as an expert human would.
 
 - **Blocks/Paragraphs:**  
@@ -259,6 +257,21 @@ blocks:
     this
     is
     paragraph
+```
+
+---
+
+### Example 7: Notation-like Content
+
+**Input:**
+```
+SRG
+```
+
+**Output:**
+```yaml
+blocks:
+  - SRG
 ```
 
 ---

@@ -1,13 +1,3 @@
-### **Project Overview (High-Level):**
-
-This project processes hand-typed or monospaced digital music notation in multiple pipeline stages:
-
-* **Paragraph Extraction:** This stage typically involves the user entering notation manually (via a text editor or interactive input) or ingesting scanned notation using OCR or transcription tools. It splits the input into **paragraphs**, where each paragraph represents a single line of monophonic music notation, possibly with annotations above and below.
-* **Line Tokenization (This Stage):** Parses a single paragraph, parsing and tokenizing the lines of the paragraph, preserving their exact positions for later stages.
-* **Later Stages:** Apply annotations, group tokens, calculate durations, and generate output formats such as LilyPond or MusicXML.
-
-This document describes **Line Tokenization: Tokenizing a paragraph of music notation**.
-
 ## 📝 Full Prompt: Music Notation Parsing (Tokenization Stage)
 
 **Background:** The document has already been split into **paragraphs** by an earlier stage. Each paragraph represents a **single line of monophonic music notation** (possibly with annotation lines above or below it). This stage parses the aforementioned paragraph—tokenizing its lines and preserving their column positions. It does not handle paragraph splitting or musical interpretation.
@@ -103,12 +93,15 @@ Notes may appear next to each other, like letters in a word, with or without spa
 
 ---
 
+
+We want YAML Format  
 #### **Output Parse Tree (Outline Format):**
 
 Output the parsed result as an indented outline tree, listing all lines in their order of appearance. Each line should show its classification and contain its own independent list of tokens with their column positions.
 
 ```plaintext
 Paragraph
+    pitch system: Number
     Upper Line
         Tokens
             [token]
@@ -149,8 +142,8 @@ S R G |
 .
 hi
 
-Paragraph:
 Paragraph
+    Pitch System: Sargam
     Upper Line
         Tokens
             space
