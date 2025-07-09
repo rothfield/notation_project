@@ -26,18 +26,17 @@ How to Find the Main Notation Line:
 Your primary goal is to find the single line that most closely resembles a melody. This line typically has a dense mix of musical symbols: notes (such as S, R, G or C, D, E), barlines ("|", "|:"), and dashes ("-"). Lines that contain only words (lyrics) or just a few scattered notes (ornaments) are unlikely to be the main line. Use your judgment to select the most plausible candidate.
 
   
-* Attempt to parse each line as a main notation line under all common pitch systems:
-    - Solfege (syllables): do, re, mi, fa, so, la, ti
-    - Solfege (abbreviated): D, R, M, F, S, L, T
-    - Devanagari: सा, रे, ग, म, प, ध, नि
-    - Sargam: S, r, R, g, G, m, M, P, d, D, n, N
-    - Number: 1, 2, 3, 4, 5, 6, 7 (with accidentals like "2b", "4#")
-    - Western: C, D, E, F, G, A, B (with accidentals like "C#", "Eb")
-    - Lowercase Western: a, b, c, d, e, f, g
-  
-Assign pitch system to the line. Use the pitch system that has the most matching notes.
-Prefer lines containing barlines (e.g., "|", "|:"), dashes ("-"), and a high density of valid pitch tokens.
-Select the single best matching line as the main notation line and detect its specific pitch system.
+*   **Identify the Pitch System:** To select the correct pitch system, you must be methodical. Evaluate the notation line against the following systems. The first system that is a strong match should be chosen.
+
+    1.  **Sargam:** `S, r, R, g, G, m, M, P, d, D, n, N`. This is the most likely system. It is distinguished by its use of both lowercase and uppercase letters for notes (e.g., `r` and `R`). If you see a mix of cases like this, you should strongly prefer Sargam.
+    2.  **Western (Uppercase):** `C, D, E, F, G, A, B`. Often includes accidentals like `#` (sharp) and `b` (flat).
+    3.  **Western (Lowercase):** `a, b, c, d, e, f, g`.
+    4.  **Solfege (Syllables):** `do, re, mi, fa, so, la, ti`. These are full words.
+    5.  **Solfege (Abbreviated):** `D, R, M, F, S, L, T`. Note the `M` and `L` are unique here compared to Sargam and Western.
+    6.  **Devanagari:** `सा, रे, ग, म, प, ध, नि`. These are non-latin characters.
+    7.  **Numbered:** `1, 2, 3, 4, 5, 6, 7`.
+
+*   **Assign Pitch System:** Once you have identified the best matching pitch system, assign it to the `pitch_system` field for the main notation line. If no system is a clear match, you may default to `Sargam` if letter-based notes are present, or `text` for the tokens if no system fits.
 
 Label Detection:
 If the main notation line begins with a label (e.g., "Var 1:", "Line 1)"), extract the label. Labels typically appear at the start of the line and are separated from the notation by whitespace. The extracted label must be stored under the "label" field in the Line.
@@ -276,13 +275,10 @@ paragraph:
           column: 0
           text: "random text here"
 
+Your output must be a single, valid YAML document. Do not include any
+other text, explanations, or conversational filler before or after the YAML.
+
 #### ✅ Now, parse this paragraph:
 
-\-[Insert Raw Document Content Here]
-
+[Insert Raw Document Content Here]
 ```
-```
-
-
-
-re followjk
