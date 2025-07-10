@@ -1,13 +1,14 @@
 #!/usr/bin/env fish
 
-# Config
-set input_file "labeling_prompt_input.txt"
-set prompt_file "labeling_prompt.md"
-set output_file "output.json"
-set payload_file "payload.json"
+set input_file "input.txt"
+sed 's/^$/BLANKLINE/' <"$input_file" >"$input_file.processed"
+
+set prompt_file "identify_structural_elements.md"
+set output_file "output.yaml"
+set payload_file "payload.yaml"
 
 # Check for required files
-for file in $input_file $prompt_file
+for file in $input_file.processed $prompt_file
     if not test -f $file
         echo "❌ Missing required file: $file" >&2
         exit 1
@@ -15,7 +16,7 @@ for file in $input_file $prompt_file
 end
 
 # Read files
-set input_text (cat $input_file)
+set input_text (cat $input_file.processed)
 set prompt_template (cat $prompt_file)
 
 # Combine: Replace placeholder
