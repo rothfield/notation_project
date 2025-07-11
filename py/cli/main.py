@@ -7,7 +7,9 @@ app = typer.Typer()
 
 @app.command()
 def process(
-    input_file: Path = typer.Argument(
+    # stdin fallback added below
+
+    input_file: Path = typer.Argument(None, help="Path to notation file (or reads from stdin if omitted)")
         ...,
         exists=True,
         file_okay=True,
