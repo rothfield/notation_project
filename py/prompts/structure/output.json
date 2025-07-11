@@ -1,0 +1,36 @@
+{
+  "id": "chatcmpl-BrqI7be5tXBkZ120UmSDIBIXpsyFk",
+  "object": "chat.completion",
+  "created": 1752172091,
+  "model": "gpt-4-turbo-2024-04-09",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "```yaml\ndocument:\n  - line:\n      line-number: 1\n      spans:\n        - tag: \"highlight\"\n          start_col: 1\n          text: \"Gat in Rag Bhairavi               Ali Akbar Khan\"\n  - line:\n      line-number: 2\n      spans: []\n  - line:\n      line-number: 3\n      spans: []\n  - line:\n      line-number: 4\n      spans: []\n  - line:\n      line-number: 5\n      spans:\n        - tag: \"highlight\"\n          start_col: 1\n          text: \"Transribed by: John\"\n  - line:\n      line-number: 6\n      spans: []\n  - line:\n      line-number: 7\n      spans:\n        - tag: \"notation\"\n          start_col: 1\n          text: \"|:  SSR- gg-m  P- :|\"\n  - line:\n      line-number: 8\n      spans: []\n  - line:\n      line-number: 9\n      spans: []\n  - line:\n      line-number: 10\n      spans:\n        - tag: \"notation\"\n          start_col: 1\n          text: \"gm |: R--- g- m-  P- | d   d d d |\"\n  - line:\n      line-number: 11\n      spans:\n        - tag: \"highlight\"\n          start_col: 1\n          text: \"in   a  sen-ti   men-tal there john\"\n  - line:\n      line-number: 12\n      spans: []\n  - line:\n      line-number: 13\n      spans: []\n  - line:\n      line-number: 14\n      spans: []\n  - line:\n      line-number: 15\n      spans: []\n```",
+        "refusal": null,
+        "annotations": []
+      },
+      "logprobs": null,
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 1307,
+    "completion_tokens": 382,
+    "total_tokens": 1689,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "audio_tokens": 0
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0
+    }
+  },
+  "service_tier": "default",
+  "system_fingerprint": "fp_de235176ee"
+}

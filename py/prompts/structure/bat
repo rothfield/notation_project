@@ -1,0 +1,59 @@
+document:
+  lines:
+  - line-number: 1
+    spans:
+    - start_col: 1
+      tag: highlight
+      text: Gat in Rag Bhairavi               Ali Akbar Khan
+  - line-number: 2
+    spans: []
+  - line-number: 3
+    spans: []
+  - line-number: 4
+    spans: []
+  - line-number: 5
+    spans:
+    - start_col: 1
+      tag: highlight
+      text: 'Transcribed by: John'
+  - line-number: 6
+    spans: []
+  - line-number: 7
+    spans:
+    - start_col: 1
+      tag: notation
+      text: .        p
+    - start_col: 11
+      tag: notation
+      text: '|:  SSR- gg-m  P- :|'
+  - line-number: 8
+    spans: []
+  - line-number: 9
+    spans: []
+  - line-number: 10
+    spans:
+    - start_col: 1
+      tag: notation
+      text: g   m                          SnSnSnS
+    - start_col: 36
+      tag: notation
+      text: '|: R--- g- m-  P- | d   d d d |   n '
+    - start_col: 66
+      tag: highlight
+      text: in   a  sen-ti   men-tal there john
+  - line-number: 11
+    spans:
+    - start_col: 1
+      tag: highlight
+      text: This is the end. la la la !
+  - line-number: 12
+    spans: []
+  - line-number: 13
+    spans: []
+  - line-number: 14
+    spans: []
+  - line-number: 15
+    spans: []
+  - line-number: 16
+    spans: []
+
