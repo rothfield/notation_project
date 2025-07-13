@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
 import sys
 import yaml
+import re
+
+def get_display_width(text):
+    """Calculates the display width of a string, ignoring ANSI escape codes."""
+    return len(re.sub(r'\033\[[0-9;]*m', '', text))
 
 # ANSI color codes for highlighting different labels
 LABEL_COLORS = {
@@ -57,16 +62,25 @@ def main():
 
     # --- 2. Display side-by-side ---
     max_original_width = max(len(line) for line in original_lines) if original_lines else 0
+
+    # Calculate the maximum display width for colorized lines, accounting for the header
+    max_colorized_width = len("Colorized")
+    if colorized_lines_map:
+        max_colorized_width = max(max_colorized_width, max(get_display_width(line) for line in colorized_lines_map.values()))
+
     num_lines = max(len(original_lines), max(colorized_lines_map.keys()) if colorized_lines_map else 0)
 
-    print(f"{'Original'.ljust(max_original_width)} | Colorized")
-    print(f"{'-' * max_original_width}-+--{'-' * max_original_width}")
+    print(f"{'Original'.ljust(max_original_width)} | {'Colorized'.ljust(max_colorized_width)}")
+    print(f"{'-' * max_original_width}-+--{'-' * max_colorized_width}")
 
     for i in range(num_lines):
         line_num = i + 1
         original = original_lines[i] if i < len(original_lines) else ""
         colorized = colorized_lines_map.get(line_num, "")
-        print(f"{original.ljust(max_original_width)} | {colorized}")
+        
+        # Manually pad the colorized string to align columns correctly
+        padding = ' ' * (max_colorized_width - get_display_width(colorized))
+        print(f"{original.ljust(max_original_width)} | {colorized}{padding}")
 
     # --- 3. Display Legend ---
     if used_labels:
