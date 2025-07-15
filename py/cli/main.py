@@ -1,62 +1,48 @@
 from pathlib import Path
 import typer
-from lib import prompting
 import sys
-import yaml
 import codecs
+import yaml
+from lib import prompting
 
-# Custom representer for multi-line strings to use literal block style for readability.
+app = typer.Typer(help="Notation CLI")
+
+# Custom YAML representer for multiline strings
 def str_presenter(dumper, data):
-    if '\n' in data:
-        return dumper.represent_scalar('tag:yaml.org,2002:str', data, style='|')
-    return dumper.represent_scalar('tag:yaml.org,2002:str', data)
+    if "\n" in data:
+        return dumper.represent_scalar("tag:yaml.org,2002:str", data, style="|")
+    return dumper.represent_scalar("tag:yaml.org,2002:str", data)
 
 yaml.add_representer(str, str_presenter, Dumper=yaml.SafeDumper)
 
-
-def process(
-
-    input_file: Path = typer.Argument(None, help='Path to notation file (or reads from stdin if omitted)'),
+@app.command()
+def run(
+    prompt_name: str = typer.Argument(..., help="Prompt to run (e.g. structure, runs)"),
+    input_file: Path = typer.Argument(None, help="Input file to read from (or stdin if omitted)"),
     output_file: Path = typer.Option(
         None,
-        '--output',
-        '-o',
-        help='The path to write the final YAML output to. Prints to console by default.'
+        "--output", "-o",
+        help="Optional output YAML file path (prints to stdout by default)"
     ),
 ):
-    # Read from file or stdin
+    """
+    Run a single prompt (e.g. structure, runs) with given input.
+    """
     if input_file:
         content = input_file.read_text()
     else:
-        content = sys.stdin.read()
-        # Unescape backslash sequences like \n into actual newlines.
-        # This allows users to pipe in strings with newlines from the command line,
-        # e.g., `echo "line1\nline2"`.
-        content = codecs.decode(content, 'unicode_escape')
-        # remove trailing newline which might have been from the unescaped sequence
-        # or from the shell command itself (e.g. echo)
-        if content.endswith('\n'):
-            content = content[:-1]
+        content = codecs.decode(sys.stdin.read(), "unicode_escape").rstrip("\n")
 
-    # --- Step 1: Run the 'structure' prompt to label notation and highlights ---
-    structure_result = prompting.run_notation_prompt(content, prompt_name='structure')
-    structure_result['document']['src'] = content
-
-    # --- Step 2: Pass the result to the 'runs' prompt for finer-grained parsing ---
-    # Convert the structured data back to a YAML string to serve as input for the next prompt.
-    runs_input_yaml = yaml.safe_dump(structure_result, sort_keys=False)
-    runs_result = prompting.run_notation_prompt(runs_input_yaml, prompt_name='runs')
-
-    # The 'runs' prompt is expected to return a final dictionary.
-    # We'll dump this to YAML for the final output.
-    final_yaml = yaml.safe_dump(runs_result, sort_keys=False)
+    result = prompting.run_notation_prompt(content, prompt_name=prompt_name)
+    yaml_output = yaml.safe_dump(result, sort_keys=False)
 
     if output_file:
-        output_file.write_text(final_yaml)
-        print(f'Output written to {output_file}')
+        output_file.write_text(yaml_output, encoding="utf-8")
+        print(f"✅ Output written to {output_file}")
     else:
-        print(final_yaml)
+        print(yaml_output)
 
 
-if __name__ == '__main__':
-    typer.run(process)
+if __name__ == "__main__":
+    app()
+
