@@ -37,4 +37,32 @@ patches/*.rej
 tools/*.tmp
 tools/*.cache
 tools/__pycache__/
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
 
+# Byte-compiled files
+*.pyo
+*.pyc
+
+# Cython / C extensions
+*.so
+
+# Test cache
+.cache/
+.pytest_cache/
+
+# Jupyter cache
+.ipynb_checkpoints/
+
+# General cache directories
+.cache/
+*.log
+*.tmp
+*.bak
+
+# Virtual environments (optional)
+.venv/
+env/
+venv/
