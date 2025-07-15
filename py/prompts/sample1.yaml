@@ -1,0 +1,137 @@
+document:
+- line:
+    line-number: 1
+    spans:
+    - title:
+        Text: Happy
+        Column: 4
+    - title:
+        Text: ' '
+        Column: 9
+    - title:
+        Text: john
+        Column: 10
+    text: Happy john
+- line:
+    line-number: 2
+    spans: []
+    text: ''
+- line:
+    line-number: 3
+    spans:
+    - octave:
+        Text: .
+        Column: 7
+    text: '   .'
+- line:
+    line-number: 4
+    spans:
+    - barline:
+        Text: 1)
+        Column: 0
+    - space:
+        Text: ' '
+        Column: 2
+    - barline:
+        Text: '|:'
+        Column: 3
+    - space:
+        Text: ' '
+        Column: 5
+    - note:
+        Pitch: C
+        Octave: 0
+        Text: CC
+        Column: 6
+    - space:
+        Text: ' '
+        Column: 8
+    - note:
+        Pitch: D
+        Octave: 0
+        Text: DD
+        Column: 9
+    - space:
+        Text: ' '
+        Column: 11
+    - note:
+        Pitch: E
+        Octave: 0
+        Text: E
+        Column: 12
+    - dash:
+        Text: '-'
+        Column: 13
+    - note:
+        Pitch: F
+        Octave: 0
+        Text: F
+        Column: 14
+    - space:
+        Text: ' '
+        Column: 15
+    - dash:
+        Text: '-'
+        Column: 16
+    - note:
+        Pitch: G
+        Octave: 0
+        Text: G
+        Column: 17
+    - space:
+        Text: ' '
+        Column: 18
+    - barline:
+        Text: '|'
+        Column: 19
+    - space:
+        Text: ' '
+        Column: 20
+    - note:
+        Pitch: C
+        Octave: 0
+        Text: C
+        Column: 21
+    - note:
+        Pitch: D
+        Octave: 0
+        Text: D
+        Column: 22
+    - note:
+        Pitch: E
+        Octave: 0
+        Text: E
+        Column: 23
+    - note:
+        Pitch: F
+        Octave: 0
+        Text: F
+        Column: 24
+    - space:
+        Text: ' '
+        Column: 25
+    - note:
+        Pitch: F
+        Octave: 0
+        Text: F
+        Column: 26
+    - note:
+        Pitch: E
+        Octave: 0
+        Text: E
+        Column: 27
+    - note:
+        Pitch: D
+        Octave: 0
+        Text: D
+        Column: 28
+    - dash:
+        Text: '-'
+        Column: 29
+    - space:
+        Text: ' '
+        Column: 30
+    - barline:
+        Text: :|
+        Column: 31
+    text: '1) |:  CC  DD  E-F -G |  CDEF FED-  :|'

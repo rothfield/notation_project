@@ -1,5 +1,5 @@
 def add_annotations_to_notation_spans(document, src_text):
-    lines = document["lines"]
+    lines = document["document"]["lines"]
     notation_lines = []
     for i, line in enumerate(lines):
         for span in line.get("spans", []):

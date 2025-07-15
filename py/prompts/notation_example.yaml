@@ -1,0 +1,49 @@
+Document:
+  Title: Title
+  Lines:
+    - Line:
+        Label:
+          text: "1)"
+          column: 7
+        Tokens:
+          - LeftRepeatBarline:
+              text: "|:"
+              column: 10
+          - Space:
+              text: " "
+              column: 12
+          - Beat:
+              Divisions: 3
+              Tokens:
+                - Note:
+                    Pitch: "C"
+                    Text: "C"
+                    Octave: 1
+                    column: 13
+                - Dash:
+                    Text: "-"
+                    column: 14
+                - Note:
+                    Pitch: "D"
+                    Text: "D"
+                    column: 15
+          - Space:
+              text: " "
+              column: 16
+          - Beat:
+              Divisions: 2
+              Tokens:
+                - Note:
+                    Pitch: "E"
+                    Text: "E"
+                    column: 17
+                - Note:
+                    Pitch: "F"
+                    Text: "F"
+                    column: 18
+          - Space:
+              text: " "
+              column: 19
+          - RightRepeatBarline:
+              text: ":|"
+              column: 20

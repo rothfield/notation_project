@@ -1,0 +1,28 @@
+Sure — here’s a **plain text summary** you can use or include in your system prompt docs:
+
+---
+
+### 📄 Patch File Format Summary
+
+All patches are written as **self-executing Fish shell scripts**, not traditional `.diff` files.
+
+#### ✅ Requirements:
+
+* Begin with `#!/usr/bin/env fish`
+* Include a `# PATCH_MSG:` comment near the top
+* Use `begin ... end > file` to create or overwrite files
+* Prompt the user before overwriting any existing file
+* Use plain `git add` and `git commit -m` commands at the end
+* Save the script to the `patches/` directory with a `.fish` extension
+
+#### ⚠️ Restrictions:
+
+* Do **not** use unified `diff` format or `patch -p1`
+* The patch script itself is what gets committed — not the files it creates
+
+This ensures that patches are human-readable, reproducible, and traceable as standalone artifacts.
+
+---
+
+Would you like this wrapped in `begin ... end > file` form for a new `.md` file?
+

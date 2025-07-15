@@ -1,0 +1,10 @@
+    Happy john
+
+       .
+1) |:  CC  DD  E-F -G |  CDEF FED-  :|
+       hi-  john
+
+       .
+2) |:  C#C  DD  E-F -G |  CDEF FED-  :|
+                          .
+ 

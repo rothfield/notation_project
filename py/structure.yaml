@@ -1,0 +1,45 @@
+document:
+  src: ''
+  lines:
+  - line-number: 1
+    spans:
+    - tag: highlight
+      start_col: 1
+      text: Happy john
+  - line-number: 2
+    spans: []
+  - line-number: 3
+    spans:
+    - tag: highlight
+      start_col: 1
+      text: .
+  - line-number: 4
+    spans:
+    - tag: notation
+      start_col: 1
+      text: '1) |:  CC  DD  E-F -G |  CDEF FED-  :|'
+  - line-number: 5
+    spans:
+    - tag: highlight
+      start_col: 1
+      text: hi-  john
+  - line-number: 6
+    spans: []
+  - line-number: 7
+    spans:
+    - tag: highlight
+      start_col: 1
+      text: .
+  - line-number: 8
+    spans:
+    - tag: notation
+      start_col: 1
+      text: '2) |:  C#C  DD  E-F -G |  CDEF FED-  :|'
+  - line-number: 9
+    spans:
+    - tag: highlight
+      start_col: 1
+      text: .
+  - line-number: 10
+    spans: []
+

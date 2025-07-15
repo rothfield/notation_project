@@ -65,10 +65,10 @@ def run_notation_prompt(content: str, prompt_name: str) -> dict:
     # 5. Parse response and return a Python object
     try:
         ai_content_raw = response_data['choices'][0]['message']['content']
-        print("--- LLM OUTPUT ---")
-        print(ai_content_raw)
-        print("--- END ---")
-        return
+        # print("--- LLM OUTPUT ---")
+        # print(ai_content_raw)
+        # print("--- END ---")
+        # return
         match = re.fullmatch(r'^\s*```(?:yaml)?\s*\n(.*)\n\s*```\s*$', ai_content_raw, re.DOTALL | re.IGNORECASE)
         extracted_yaml_str = match.group(1).strip() if match else ai_content_raw.strip()
         

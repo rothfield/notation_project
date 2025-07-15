@@ -1,0 +1,168 @@
+notation_document:
+  src: "    Happy john\n\n       .\n1) |:  CC  DD  E-F -G |  CDEF FED-  :|\n     \
+    \  hi-  john\n\n       .\n2) |:  C#C  DD  E-F -G |  CDEF FED-  :|\n          \
+    \                .\n \n"
+  lines:
+  - line_number: 4
+    tokens:
+    - kind: note
+      text: '1'
+      column: 1
+      annotation:
+      - .
+      - hi-  john
+    - kind: symbol
+      text: )
+      column: 2
+      annotation:
+      - .
+      - hi-  john
+    - kind: barline
+      text: '|'
+      column: 4
+    - kind: barline
+      text: ':'
+      column: 5
+    - kind: note
+      text: C
+      column: 8
+    - kind: note
+      text: C
+      column: 9
+    - kind: note
+      text: D
+      column: 12
+    - kind: note
+      text: D
+      column: 13
+    - kind: note
+      text: E
+      column: 16
+    - kind: dash
+      text: '-'
+      column: 17
+    - kind: note
+      text: F
+      column: 18
+    - kind: dash
+      text: '-'
+      column: 20
+    - kind: note
+      text: G
+      column: 21
+    - kind: barline
+      text: '|'
+      column: 23
+    - kind: note
+      text: C
+      column: 26
+    - kind: note
+      text: D
+      column: 27
+    - kind: note
+      text: E
+      column: 28
+    - kind: note
+      text: F
+      column: 29
+    - kind: note
+      text: F
+      column: 31
+    - kind: note
+      text: E
+      column: 32
+    - kind: note
+      text: D
+      column: 33
+    - kind: dash
+      text: '-'
+      column: 34
+    - kind: barline
+      text: ':'
+      column: 37
+    - kind: barline
+      text: '|'
+      column: 38
+  - line_number: 8
+    tokens:
+    - kind: note
+      text: '2'
+      column: 1
+      annotation:
+      - .
+      - .
+    - kind: symbol
+      text: )
+      column: 2
+      annotation:
+      - .
+      - .
+    - kind: barline
+      text: '|'
+      column: 4
+    - kind: barline
+      text: ':'
+      column: 5
+    - kind: note
+      text: C
+      column: 8
+    - kind: symbol
+      text: '#'
+      column: 9
+    - kind: note
+      text: C
+      column: 10
+    - kind: note
+      text: D
+      column: 13
+    - kind: note
+      text: D
+      column: 14
+    - kind: note
+      text: E
+      column: 17
+    - kind: dash
+      text: '-'
+      column: 18
+    - kind: note
+      text: F
+      column: 19
+    - kind: dash
+      text: '-'
+      column: 21
+    - kind: note
+      text: G
+      column: 22
+    - kind: barline
+      text: '|'
+      column: 24
+    - kind: note
+      text: C
+      column: 27
+    - kind: note
+      text: D
+      column: 28
+    - kind: note
+      text: E
+      column: 29
+    - kind: note
+      text: F
+      column: 30
+    - kind: note
+      text: F
+      column: 32
+    - kind: note
+      text: E
+      column: 33
+    - kind: note
+      text: D
+      column: 34
+    - kind: dash
+      text: '-'
+      column: 35
+    - kind: barline
+      text: ':'
+      column: 38
+    - kind: barline
+      text: '|'
+      column: 39
