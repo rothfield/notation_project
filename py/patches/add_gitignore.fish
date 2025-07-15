@@ -1,4 +1,9 @@
-# Byte-compiled / optimized / DLL files
+begin
+    set PATCH "Add .gitignore tailored to py project layout"
+    set PROMPT "reorganizing py python project\nstart with gitignore"
+    set FILE .gitignore
+
+    echo "# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *.pyo
@@ -38,3 +43,11 @@ tools/*.tmp
 tools/*.cache
 tools/__pycache__/
 
+# Ignore structure backup variants
+structure.yml" > $FILE
+
+    git add $FILE
+    git commit -m "$PATCH
+
+$PROMPT"
+end

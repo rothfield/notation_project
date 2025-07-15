@@ -38,16 +38,24 @@ def process(
         if content.endswith('\n'):
             content = content[:-1]
 
-    # Run LLM-powered notation prompt
-    result = prompting.run_notation_prompt(content, prompt_name='structure')
-    result['document']['src']= content
-    # print(result)
-    result_yaml = yaml.safe_dump(result, sort_keys=False)
+    # --- Step 1: Run the 'structure' prompt to label notation and highlights ---
+    structure_result = prompting.run_notation_prompt(content, prompt_name='structure')
+    structure_result['document']['src'] = content
+
+    # --- Step 2: Pass the result to the 'runs' prompt for finer-grained parsing ---
+    # Convert the structured data back to a YAML string to serve as input for the next prompt.
+    runs_input_yaml = yaml.safe_dump(structure_result, sort_keys=False)
+    runs_result = prompting.run_notation_prompt(runs_input_yaml, prompt_name='runs')
+
+    # The 'runs' prompt is expected to return a final dictionary.
+    # We'll dump this to YAML for the final output.
+    final_yaml = yaml.safe_dump(runs_result, sort_keys=False)
+
     if output_file:
-        output_file.write_text(result_yaml)
+        output_file.write_text(final_yaml)
         print(f'Output written to {output_file}')
     else:
-        print(result_yaml)
+        print(final_yaml)
 
 
 if __name__ == '__main__':

@@ -7,7 +7,7 @@ from pathlib import Path
 
 # This is the key change: Find the project root relative to this file.
 # This makes the prompt loading robust.
-PROMPTS_DIR = Path(__file__).parent.parent.parent / "prompts"
+PROMPTS_DIR = Path(__file__).parent.parent / "prompts"
 
 def run_notation_prompt(content: str, prompt_name: str) -> dict:
     """

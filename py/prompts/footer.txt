@@ -1,6 +1,6 @@
 #### ✅ Now, parse this :
 
-[[DOCUMENT]]
+[[INPUT]]
 
 ```
 ```

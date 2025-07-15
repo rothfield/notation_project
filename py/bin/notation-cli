@@ -1,4 +1,4 @@
 #!/bin/sh
 cd "$HOME/projects/notation_project/py" || exit 1
-exec python -m cli.main "$@"
+exec ./.venv/bin/python -m cli.main "$@"
 
