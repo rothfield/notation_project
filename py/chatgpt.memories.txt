@@ -1,0 +1,705 @@
+Skip to content
+Chat history
+
+You said:
+tokenize_notation_spans.md
+File
+Happy john
+               DEF .
+|:  CC  DD  E-F -G |  CDEF FED-  :|     <<<<<<
+     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+hi-  john
+ChatGPT said:
+tokens:
+  - text: "|:"
+    column: 0
+    kind: "barline"
+  - text: "  "
+    column: 2
+    kind: "space"
+  - text: "C"
+    column: 4
+    kind: "pitch"
+  - text: "C"
+    column: 5
+    kind: "pitch"
+  - text: "  "
+    column: 6
+    kind: "space"
+  - text: "D"
+    column: 8
+    kind: "pitch"
+  - text: "D"
+    column: 9
+    kind: "pitch"
+  - text: "  "
+    column: 10
+    kind: "space"
+  - text: "E"
+    column: 12
+    kind: "pitch"
+  - text: "-"
+    column: 13
+    kind: "dash"
+  - text: "F"
+    column: 14
+    kind: "pitch"
+  - text: " "
+    column: 15
+    kind: "space"
+  - text: "-"
+    column: 16
+    kind: "dash"
+  - text: "G"
+    column: 17
+    kind: "pitch"
+  - text: " "
+    column: 18
+    kind: "space"
+  - text: "|"
+    column: 19
+    kind: "barline"
+  - text: "  "
+    column: 20
+    kind: "space"
+  - text: "C"
+    column: 22
+    kind: "pitch"
+  - text: "D"
+    column: 23
+    kind: "pitch"
+  - text: "E"
+    column: 24
+    kind: "pitch"
+  - text: "F"
+    column: 25
+    kind: "pitch"
+  - text: " "
+    column: 26
+    kind: "space"
+  - text: "F"
+    column: 27
+    kind: "pitch"
+  - text: "E"
+    column: 28
+    kind: "pitch"
+  - text: "D"
+    column: 29
+    kind: "pitch"
+  - text: "-"
+    column: 30
+    kind: "dash"
+  - text: "  "
+    column: 31
+    kind: "space"
+  - text: ":|"
+    column: 33
+    kind: "barline"
+Do you like this personality?
+
+
+
+
+
+
+No file chosenNo file chosen
+ChatGPT can make mistakes. Check important info.
+
+Custom instructions
+On
+Reference saved memories
+
+Let ChatGPT save and use memories when responding.
+Reference chat history
+
+Let ChatGPT reference all previous conversations when responding.
+Manage memories
+
+Manage
+100% full
+ChatGPT may use Memory to personalize queries to search providers, such as Bing. Learn more
+
+100% full
+You’re out of space. Remove existing memories to make room for ChatGPT to save new memories.
+Wants to create a prompt file named `tokenize_notation_spans` to have the LLM segment notation spans into column-aware tokens.
+
+Wants a new prompt file named `tokenize_notation_spans.yaml` that instructs the LLM to tokenize each "notation" span into musical tokens, including pitch, barline, repeat marks, dash, breath, ornament, etc. Tokens must include text, column, and kind. Accidentals are part of the pitch token. Tokens can be adjacent, and most are 1–3 characters long. Repetition of pitches is not allowed.
+
+Prefers patch scripts in Fish that:
+- Are minimal and readable.
+- Include confirmation prompts before each state-changing step (e.g. mkdir, touch, git add, git commit).
+- Do not include unnecessary ceremony or wrapper logic.
+- Are approved manually before running and committed afterward as traceable macros.
+
+When the user asks for a patch script, generate a `.fish` file that follows this structure.
+
+Confirmed that their preferred patch system is:
+- Patch scripts are written in Fish (`*.fish`) format.
+- `apply_llm_patch.py` is the controller script that:
+  - Reads patch content from stdin.
+  - Extracts `# PATCH_MSG:` as the commit message.
+  - Saves the patch to `patches/*.fish`.
+  - Confirms interactively before executing or committing.
+
+Patch block format is:
+```fish
+#!/usr/bin/env fish
+# PATCH_MSG: <commit message>
+
+<fish commands>
+
+git add ...
+git commit -m "<commit message>"
+```
+
+This system is considered a durable tool and should be preserved.
+
+Wants the `apply_llm_patch.py` script to be treated as a canonical tool and preserved in memory. It reads patch content from stdin, writes to a `.fish` file with a `# PATCH_MSG:` line, confirms before saving the patch, uses a temp file if declined, and only commits if the patch file was created. This tool should be maintained as a stable, named utility in the system.
+
+Wants every generated file (like README or .gitignore) to include an auto-executing Fish script that creates the file, adds it to Git, and commits it with a message. These scripts should be saved under `patches/`.
+
+Prefers to always use a prompt + patch flow, even for small edits, to preserve reasoning. Manual changes are acceptable only for trivial or emergency fixes.
+
+GitHub username is "rothfield".
+
+Prefers that all auto-exec patch scripts be interactive by default, prompting before executing key actions (e.g., git init, push, file overwrite). Dry-run-style echoing is optional, but interactivity is required for all non-trivial patch scripts.
+
+Wants the `findany` function added directly to their Fish shell config so it's always available.
+
+Prefers using Fish shell's `begin ... end > file` blocks instead of heredocs for writing files. This preference is permanent and applies to all responses involving file creation or patching in Fish shell.
+
+Has a YouTube video script titled 'AI-Assisted Auto-Commits: Let ChatGPT Patch & Document Your Code for You,' explaining their AI-assisted, auto-committing, prompt-to-Git workflow. The script includes a demo, explanation of benefits, and optional consulting pitch. User may want to reuse or reference this script later.
+
+Prefers that CLI commands for applying or using code patches be provided automatically whenever code (especially patches) is written.
+
+Prefers to always receive a ready-to-use patch file along with the full Git CLI commands to apply it, including Git commit commands, ready for copy-paste.
+
+Prefers that every code change (including patches) include a ready-to-paste Python script (Fish-compatible) that:
+- Applies the patch.
+- Runs the Git commit.
+- Saves the original prompt and AI summary in the commit message.
+This script should be saved alongside the patch in `patches/`.
+
+Prefers that every patch includes a Python script that applies the patch and auto-commits, but instead of just saving the script, I must always display the full script content directly in the chat for easy copy-paste.
+
+Prefers that the Python patch+commit script be displayed as a shell one-liner (Fish-compatible) that starts with `echo` or `begin ... end > file` to create the file, making it copy-pasteable to create and run the script in one step.
+
+Prefers that every patch script also includes a ready-to-paste Git command to revert (undo) the patch/commit, displayed alongside the patch script.
+
+Prefers Fish shell `begin ... end > file` style snippets (instead of echo chains) for creating patch+commit scripts, and wants them to immediately execute themselves after creation.
+
+Prefers that all generated patch scripts and snippets assume the current working directory is `project_root/py`.
+
+Prefers that full-paste patch snippets only write the patch script (not the patch file itself) and assumes the patch file already exists in the patches/ directory.
+
+Prefers that patch snippets always create the patch file (overwriting if it exists) along with the patch script, assuming the target file exists in the working directory.
+
+Requires that all prompt files created or edited must include a footer at the end with the line `[[DOCUMENT]]`. This rule must be applied permanently to all prompt creation or edits.
+
+Prefers to use the term "tagger" instead of "segmenter" for prompts or processes related to labeling or training data.
+
+Prefers to always use YAML as the input format for prompts, pipelines, and related scripts instead of JSON.
+
+Prefers to install PyYAML via `pacman -S python-yaml` instead of using `pip`, as they are not a Python developer.
+
+Remember to use `LLM_API_KEY` as the environment variable for API keys when generating code.
+
+Wants to preserve footer lines like `[[DOCUMENT]]` at the end of their prompts and does not want these lines to be deleted or omitted during prompt rewrites or merges.
+
+Prompt footer is:
+```
+#### ✅ Now, parse this :
+
+    [DOCUMENT]
+
+    ```
+User wants this footer preserved at the end of prompts.
+
+Prefers Fish shell for scripts and command-line tasks. They prefer using `echo > filename` over editors for file changes. They are using Arch Linux. They prefer modern CLI tools such as `sd` and `rg`.
+
+Prefers to use a universal bracketing strategy for code replacement. They use `####method_name` and `####end` markers inside comments to delimit code blocks across any programming language. The assistant should include such brackets in future method/code snippets and provide ready-to-use `sd` one-liners for replacements.
+
+Prefers to initially create brackets in the form `#begin method_name#` and `#end method_name#` for marking method or code block boundaries. Future code snippets and CLI replacement commands should use this bracket style.
+
+Prefers to use the following one-liner (adjusting the language as needed) for safe bracketed replacements, showing the full code snippet before and after replacement, with syntax highlighting using `bat`. They may later add it to a Fish function:
+
+echo "Before:"; rg -U -z -o -P '(?s)#begin BLOCK#.*?#end BLOCK#' file | bat --language LANG; and sd '^.*#begin BLOCK#.*$' '...replacement...' file; and echo "After:"; rg -U -z -o -P '(?s)#begin BLOCK#.*?#end BLOCK#' file | bat --language LANG; and echo "Replacement successful!" || echo "Marker not found, replacement skipped."
+
+Is using Fish shell. Always provide Fish-compatible commands and avoid suggesting Bash-specific constructs like heredocs (`<< EOF`) or Bashisms unless explicitly asked. Default to Fish-native solutions such as `begin; ...; end > file` for multi-line file creation.
+
+Prefers one-liners for creating new files, even in Fish shell. When generating files in Fish, provide one-liners only for file creation (no multi-step interactive approaches).
+
+Prefers one-liners for creating new files in Fish, using Fish's multi-line literal feature (`begin; ...; end > file`) for clarity and proper formatting, instead of echo chains or heredocs.
+
+Notation parsing system identifies the main notation line by attempting to parse all lines under different pitch systems (Sargam, Number, Western, Lowercase Western) and selecting the best match, preferring lines with barlines. Annotations above and below the main line are matched by column ±1 tolerance and may include octave shifts, ornaments, and lyrics. Ornaments are structured as:
+```
+ornament
+    position: before
+    note
+        pitch: ...
+```
+Whitespace is preserved as tokens. The parse tree output uses this structure:
+```
+Line
+    Pitch System
+    Label
+    Tokens
+```
+Tokens are listed in order, and each includes the `column` field (0-based position in the main line).
+
+Wants to focus on training AI to interpret their own handwritten Sargam notation directly.
+
+Wants to add a `logical_cursor` field to the `Composition` model to track editing position.
+
+Wants `Composition`, `Line`, and `Beat` to use `Vec<T>` directly, not `Option<Vec<T>>`.
+
+Wants `Note::new(pitch_code: PitchCode)` to be the constructor, encapsulating default values like id, kind, and pitch system.
+
+Wants to move all barline element types (e.g., `LeftBarline`, `RightBarline`, `FinalBarline`, etc.) into the `models` directory, creating a flat list of elements.
+
+Wants to always use Pest for parsing logic moving forward.
+
+Prefers not to use `lib.rs`; parsing modules should use descriptive filenames like `parse_line_elements.rs`.
+
+Wants to introduce a centralized `element_kind` enum or mapping in the model layer to standardize kind identifiers for all model elements.
+
+Wants all model structs (e.g., Composition, Line, Pitch, etc.) to include an `id` field.
+
+Wants `width` and `height` removed from the `Composition` model — they belong in the view model.
+
+Wants to add `NotationKind` to the project and continue developing the next model for review.
+
+Wants lyrics in the `Line` model to be represented as separate syllables, using a dedicated `Lyrics` struct.
+
+Wants to define a `PitchSystem` model to represent pitch systems, and use it in `Composition` and `Line` instead of a raw `String`.
+
+Wants `pitch_system` (pitch system) to be included in `Composition` and `Line`.
+
+Is not using multiple lines per paragraph in this version; however, the `Line` model may still need to support lyrics. User wants the `name` field in the `Line` model to be renamed to `label`.
+
+Wants to add optional `header` and `footer` fields to the `Composition` model for future use.
+
+Prefers a flat element hierarchy. Under the `element` directory, they want separate files for `left_barline` and `right_barline`.
+
+Wants to rename `Token` to `Element`, since 'token' should refer to the output of the lexer, not the parsed model.
+
+Wants the directory for parsed model elements to be named `elements`.
+
+Specified that the `Note` object includes `pitch_system` and `pitch_code`, where `pitch_code` is canonical. The canonical pitch system is the 'Number' system.
+
+Clarified that `Pitch` should be renamed to `Note`, and `Note` has a `pitch` attribute.
+
+Wants to add a `last_cursor_element_id` field to the `Composition` model.
+
+Does not want to include `duration` in the `Note` struct yet.
+
+Is considering moving their JavaScript-based music notation codebase to Rust + WebAssembly, and is interested in converting parts of it from JavaScript to Rust.
+
+Wants the Rust version of their project to include one unit test per function, one integration test per module, and one LilyPond code generation test. They prefer a balanced testing approach without going overboard.
+
+Old code ran LilyPond on the server, using '-' (stdin/stdout) to avoid disk bottlenecks, and rendered the output as SVG for display on a web page. Typing a pitch like 'C' would produce staff notation.
+
+Is intentionally starting from a clean-room implementation and not referencing their old codebase (doremiscript), to avoid reusing potentially outdated design patterns.
+
+`input/` directory contains:
+- `handleBackspace.js`
+- `handleClick.js`
+- `mouse/` directory with:
+  - `handleDown.js`
+  - `handleMove.js`
+  - `handleUp.js`
+  - `index.js`
+  - `setupMouseEvents.js`
+
+Decided to use regexes for the initial lexer implementation.
+
+Wants the regex-based lexer to emit structured `note` objects with normalized pitch, and also include other tokens like barline, dash, and whitespace.
+
+Prefers to rename `PitchSpelling` to `Pitch` for representing the normalized pitch structure across notation systems.
+
+Wants to use number notation as the standard model for pitch.
+
+Wants to pass `notationKind` into `lexLine`, and use a different regex for each notation system.
+
+Wants to store notation-specific regex patterns in a helper module (e.g., `regex_by_notation.js`).
+
+Wants their regex-based lexer to support `##` and `bb` accidentals, and the following pitch systems:
+- Number: `1 2 3 4 5 6 7`
+- Solfege (minor): `d r m f s l t`
+- Solfege (major): `do re mi fa so la ti`
+- Sargam: `S r R g G m M P d D n N` (case matters; `s` → `S`, `p` → `P`)
+
+Wants their regex-based lexer to also support the alphabetic pitch system `a b c d e f g`, optionally with accidentals (`#`, `b`, `##`, `bb`).
+
+Wants the Solfege system to match Sargam structurally, using the letters: `D r R m M f F S l L t T` to represent the chromatic diatonic scale, mirroring Sargam's `S r R g G m M P d D n N`.
+
+Specified that the Number pitch system should follow this order: 1, 2b, 2, 3b, 3, 4, 4#, 5, 6b, 6, 7b, 7. This is the modal chromatic scale for the Number pitch system.
+
+Specified that enharmonic sharps and flats (like `2#` or `6##`) are allowed in the Number pitch system, but are not commonly used in a modal music mindset.
+
+Prefers to use complete and readable regexes that allow full accidental forms. A canonical form is not needed at this stage.
+
+Is planning to implement LilyPond conversion soon.
+
+Wants to add a "LilyPond" notation system using spellings like `c`, `db`, `d`, `eb`, `e`, `f`, `fsh`, `g`, including all sharps and double sharps. They want to keep track of the canonical nature of pitches, potentially using a conversion grid.
+
+Wants to visually verify the LilyPond pitch mapping grid.
+
+Wants the pitch mapping grid to be like an Excel spreadsheet and to exclude enharmonic equivalences.
+
+Wants the pitch mapping grid to serve as a table of equivalences between LilyPond spellings and other notation systems.
+
+Wants to include additional mappings in the Sargam column:
+- `cb` = `Sb`
+- `fb` = `mb`
+- `gb` = `Pb`
+- `c#` = `S#`
+and similar straightforward extensions.
+
+Wants to parse into beats. Token-level operations may use a walk function.
+
+Uses lowercase token types and wants the lexer to emit whitespace tokens.
+
+Is currently using the Go LSP and is switching to Mason for LSP management in LazyVim.
+
+Wants to start fresh on lyric alignment. The issue was that the lyric wasn't using the same absolute positioning technique as octave dots.
+
+Wants to use a colon (`:`) to represent two octave dots instead of stacking them vertically, for now.
+
+Wants the font to be larger and lyrics to follow traditional typography conventions.
+
+Wants lyric typography to follow LilyPond's example, using appropriate serif font styling and spacing.
+
+Sargam is the name of the North Indian system that uses S r R etc.
+
+Prefers the pitch system order to be: Numbered, Western, DoReMi, Sargam.
+
+Prefers the pitch system order to be: Western, Number, DoReMi, Sargam. 'Number' should be used instead of 'Numbered'.
+
+Wants the system to support double flats for completeness.
+
+Indicated that double sharps and double flats may be overkill for their use case, which aligns more closely with Renaissance-era musical thinking.
+
+Wants the system to reject double sharps and double flats.
+
+Wants to support double sharps and double flats only in the Western pitch system. All other pitch systems should reject them.
+
+Prefers that pitch spelling maps (e.g., for the Western system) start with common note names in a musically logical order: C, C#, Db, D, Eb, E, F, F#, Gb, G, G#, Ab, A, A#, Bb, B.
+
+Prefers pitch spelling maps to follow a musically structured order inspired by Sargam:
+- Western: C, Db, D, Eb, E, F, F#, G, Ab, A, Bb, B, followed by others
+- Sargam: S, r, R, g, G, m, M, P, d, D, n, N
+- Number: 1, 2b, 2, 3b, 3, 4, 4#, 5, 6b, 6, 7b, 7.
+
+Prefers the Western pitch spelling map to start with the order: C, Db, D, Eb, E, F, F#, G, Ab, A, Bb, B.
+
+Wants the Number and Sargam pitch systems to include sharps and flats.
+
+Wants to avoid enharmonic thinking in the system — each pitch spelling (e.g., Db vs C#) should be treated as distinct and not converted or equated.
+
+Prefers that in the Sargam pitch spelling map, D# should come after D, and similarly N# should come after N.
+
+Prefers that in the Sargam pitch spelling map, normal pitch names (S, r, R, g, G, m, M, P, d, D, n, N) should be listed first, with any additional accidentals following.
+
+Wants the Number and Sargam pitch systems to include accidentals just like Western, but listed after the normal pitch names.
+
+Wants the Sargam and Number pitch systems to have the same number of entries as Western, with any missing entries (like double sharps and double flats) added at the end.
+
+Prefers that in the Sargam pitch spelling map, entries should follow the order: S, r, R, g, G, m, M, P, d, D, n, N, followed by accidentals like R#, G#, etc.
+
+Wants all pitch spelling maps (Western, Number, Sargam) to follow this specific order:
+
+(0, 0)
+(1, -1), (1, 0)
+(2, -1), (2, 0)
+(3, 0), (3, 1)
+(4, 0)
+(5, -1), (5, 0)
+(6, -1), (6, 0)
+Then any remaining accidentals like sharps and double sharps should follow after this core sequence.
+
+Specified that spaces are beat separators, not pitch separators.
+
+Wants the pitch system to be included in the formatter output, shown at the paragraph level for visualization.
+
+Prefers the field 'PitchSystem' to be renamed to 'Notation' for display and representation in the formatter.
+
+Prefers the name 'NotationSystem' instead of 'PitchSystem' to reflect that the system refers to letter-based music notation.
+
+Prefers the name 'Notation' instead of 'NotationSystem' for clarity and alignment with common usage like 'Sargam notation,' 'Number notation,' and 'Western notation'.
+
+Wants to hook up the upper/lower loop HTML visualizer with their parse tree system.
+
+Wants:
+- A clean sans-serif font (not monospace)
+- Tighter pitch spacing
+- Larger lyrics placed below the loop
+- Octave annotations (above the pitch)
+- Octave dot rendered as a bold, large dot (e.g., using `•` or similar)
+
+Specified that octave annotations should appear above the note for upper octaves and below the note for lower octaves.
+
+Wants octave dots to be very close to the note.
+
+Wants the loop arc to be more rounded.
+
+Wants octave dots positioned between the loop and the note.
+
+Wants loops and slurs to be very close to the notes, even if they impinge slightly.
+
+Wants the input text area to be monospaced 14pt.
+
+Wants the rendered HTML to remain monospaced, even though the input text area is monospaced 14pt.
+
+Wants the HTML rendering to use a proportional font; only the text area should remain monospaced.
+
+Wants no space between pitches in the rendered HTML.
+
+Wants pitches in the rendered HTML to be flush, aligned exactly as they would be in a text editor.
+
+Wants pitches in the rendered HTML to use a proportional font; only the text area should be monospaced.
+
+Wants a full Neovim setup from scratch using Lazy.nvim, with support for Go development, Treesitter, LSP, autocompletion, formatting, Telescope, Git integration, and Fish shell compatibility.
+
+Specified that lower annotation lines do not contain tala symbols.
+
+Wants to add support for a new `LowestOctave` annotation (`:`) in the lower annotation line, and a new `HighestOctave` annotation (`:`) in the upper annotation line.
+
+Specified that the same character (`.` or `:`) may represent different tokens depending on line context. In upper annotation lines:
+- `.` = UpperOctave
+- `:` = HighestOctave
+
+In lower annotation lines:
+- `.` = LowerOctave
+- `:` = LowestOctave.
+
+Wants to remove `PhraseMark` from the token vocabulary for now.
+
+Wants to keep `Breath` as a token type and use `'` as its symbol.
+
+PhraseMark should be purged from the system.
+
+Wants to rename the function `FoldAnnotations` to `ApplyAnnotations`.
+
+Has completed a major refactor of their Go project, which included significant changes to data types and the formatter/renderer.
+
+Changed `LetterLineElement.SyllableText` to `[]string` named `Syllables`. Formatter and folding logic should now reflect multiple syllables per element.
+
+Has removed the `Lyric` token type from the system and now uses only `Syllable` for lyric annotations.
+
+Wants annotation lines and lyric lines to be displayed token by token in the formatter, instead of as raw strings.
+
+Prefers to use "Pitch" instead of "PitchToken" when referring to the token type name in conditions and comparisons.
+
+Wants `LetterLineElement` to have a `Syllable string` for aligned lyrics and `ExtraSyllables []string` for leftover or fallback syllables.
+
+Wants to rename `UpperAnnotationType` to `UpperAnnotationsLineType` and `LowerAnnotationType` to `LowerAnnotationsLineType`.
+
+Wants to use the file name `identify_line_roles.go` for logic that classifies line types in a paragraph.
+
+Wants `ClassifyLines` to:
+- Abort if a line contains more than one error token during lexing.
+- Immediately identify the `LetterLine` if a line lexes with no error tokens.
+- Use a separate `findLetterLine` function to handle this logic.
+
+Prefers `findLetterLine` to:
+- Not cache token results.
+- Break out as soon as the `LetterLine` is identified.
+
+Specified that the following line structures are valid in a paragraph:
+
+- `LetterLine`
+- `LetterLine` + `LowerAnnotation`
+- `LetterLine` + `Lyrics`
+- `LetterLine` + `LowerAnnotation` + `Lyrics`
+
+There can be **zero or one** of:
+- Upper Annotations
+- Lower Annotations
+- Lyrics Lines.
+
+Specified that `Lyrics` can follow directly after `LetterLine`, without a `LowerAnnotation`.
+
+Specified that there can be more than one `Lyrics` line after the `LetterLine` and `LowerAnnotation`.
+
+Specified that multiple `Lyrics` lines should not be supported. Only one `Lyrics` line is allowed after the `LetterLine` and `LowerAnnotation`.
+
+Wants the raw input in the tree renderer output to be left-justified with no indentation.
+
+Specified that stray lyrics should be added to the last pitch, and dashes should not receive lyrics.
+
+Prefers to represent pitch elements using typed fields (Octave, Mordent, TalaMarker, LyricText) instead of a flexible map.
+
+Wants to incrementally refactor their project, starting with a clean `LetterLine` structure and a new parser.
+
+Wants `IdentifyLine` to be renamed to `ClassifyLines`. The logic should:
+- First, identify the mandatory `LetterLine`, which is usually the longest.
+- The `LetterLine` should not contain vowels (`a`, `e`, `i`, `o`, `u`) or octave markers (`.` or `:`).
+- Classification of the remaining lines should follow after the `LetterLine` is identified.
+
+Specified that `U:`, `A:`, and `L:` prefixes will not be used for identifying line types. Classification will be determined purely by structure and content.
+
+Specified that the `LetterLine` is the only line that contains `|` barlines. This will be used as an additional check during classification.
+
+Moved `ClassifyLines` into its own file.
+
+Specified that if there is only one line in the paragraph, it must be classified as a `LetterLine`.
+
+Specified that `LetterLine` is mandatory in every paragraph. If no `LetterLine` is detected by classification, it is a parsing error.
+
+Specified that the order in `ClassifyLines` is as follows:
+- Upper Annotations are **before** the `LetterLine`.
+- Lower Annotations are **immediately after** the `LetterLine`.
+- Lyrics lines are **after the Lower Annotations** and not before.
+
+Specified that if no `LetterLine` with `|` is found, the logic should look for the **longest line containing only the characters `S`, `r`, `R`, `g`, `G`, `m`, `d`, `D`, `n`, `N`, `P`, and dashes (`-`)** instead of just the longest line without vowels.
+
+Specified that if no `LetterLine` is found during classification, it should not panic.
+
+Wants the front-end JavaScript to automatically re-submit the last request when the server restarts, and the server logs should display the request upon reconnection.
+
+Specified that blank lines at the beginning and end of the paragraph should be deleted, and any blank lines in between should be trimmed during classification.
+
+Specified that in printing the parse tree, annotation lines (Upper, Lower, Lyrics) that are `nil` or empty should not be included in the output.
+
+Specified that in the parse tree structure display, Upper Annotations, Lower Annotations, and Lyrics should not be included if they are empty.
+
+Wants the WebSocket communication to send the parse tree as a plain string format, the same as the console display. No special formatting is required.
+
+Prefers the WebSocket to attempt reconnection every 30 seconds, indefinitely, after the server restart, instead of using exponential backoff.
+
+Specified that parsing should not create empty paragraphs. Trailing and leading lines should be trimmed before starting paragraph parsing.
+
+Specified that consecutive empty lines should be folded into a single blank line during parsing.
+
+Wants the version bumper script to update all CSS (`<link>`) and JavaScript (`<script>`) links or hrefs in `index.html`, regardless of the file name.
+
+Specified that the notation `SrRgGmMPdDnN` maps to the following pitches in LilyPond:
+- S → C
+- r → Db
+- R → D
+- g → Eb
+- G → E
+- m → F
+- M → F#
+- P → G
+- d → Ab
+- D → A
+- n → Bb
+- N → B.
+
+Specified that each beat is a quarter note in duration. For example, `S--r` represents:
+- `S` with two dashes (`--`) equals 3/4 of a quarter note.
+- `r` without a dash equals 1/4 of a quarter note.
+
+Specified that each beat is exactly 1/4 of a note, and the presence of dashes (`-`) extends the note's duration within that 1/4. For example, `S--` consumes 3/4 of the 1/4 beat (3/16 of a whole note), and `r` consumes 1/4 of the 1/4 beat (1/16 of a whole note). Fractional calculations are required for duration management.
+
+Specified that duration calculations must be reduced to powers of 2 for LilyPond generation. If the denominator is not a power of 2, tuplets should be used to represent the note durations accurately.
+
+Prefers to use `/tuplet` for tuplets in LilyPond generation instead of `\times`.
+
+Specified that dotted and double-dotted notes should be used in LilyPond generation when a note starts at the beginning of a beat and its duration matches the dotted or double-dotted note values.
+
+Specified that mordents, talas, lower octaves, and lyrics from annotation lines should be attached to the corresponding pitch in the same column, with a tolerance of plus or minus 1 position.
+
+Specified that talas apply to the nearest element (not just pitches) with a tolerance of plus or minus 1 position. Any extra lyrics that do not align with a pitch apply to the last pitch in the line.
+
+Wants a phase during parse tree traversal where annotations (octaves, mordents, talas, lower octaves, and lyrics) are folded into the paragraph's `LetterLine` as attributes. The formatter should be updated accordingly to reflect these changes.
+
+Specified that talas can apply to any element, not just pitches.
+
+Prefers `LetterLineElement` to use explicit fields for annotations (OctaveShift, Mordent, TalaMarker, LyricText) instead of a flexible attribute map.
+
+Wants `ParseLetterLine` to stop assigning column positions to Beats. Top-level elements should be considered for annotation folding instead.
+
+Project now uses 'Column' instead of 'X' for element positioning in the parse tree and formatter display.
+
+Wants to add a `Column` attribute to annotation elements and ensure they are displayed for debugging purposes.
+
+Specified that annotation lines are approximately 1/5 the length of the letter line.
+
+Specified that column number is always the physical column and should be preserved during all phases of parsing and annotation folding.
+
+Specified that in `parser.go`, a slur can occur within a beat.
+
+Specified that in `parser.go`, a slur can occur either at the top level or within a beat.
+
+Specified that slurs should not be considered as independent elements; they should be treated as left-slur and right-slur.
+
+Specified that slurs should not create segments within a beat; they are simply left-slur and right-slur markers.
+
+Specified that `LeftSlur` and `RightSlur` can also occur outside a beat.
+
+Specified that `(` and `)` can be nested, like in the example `( S(- S)`, and it is valid.
+
+Specified that a Beat can contain a Phrase Mark.
+
+Specified that a Breath mark can occur within a Beat.
+
+Specified that only Pitch and Dash can start a Beat.
+
+Wants the `LetterLine` structure to use `LetterLineElement` instead of a `Beats[]` array.
+
+Wants the `Beat` structure to be a `LineElement` within `LetterLine`, while still supporting the new `LetterLineElement` structure.
+
+Wants `annotation-mapper.go` to be updated to work with the new `LetterLineElement` structure in `LetterLine`.
+
+Wants `Beat` to be added as a `TokenType` in `token.go`.
+
+Is working on a Go project to parse a form of letter music notation into a parse tree, with plans to add LilyPond output. The notation includes pitches, barlines, dashes, and annotations for lyrics, ornaments, talas, and octaves. The project involves parsing lines of letter notation and calculating note durations based on subdivisions of beats.
+
+Mordent (`~`) is used in the upper annotation line.
+
+Tala symbols (`0 + 1 2 3 4 5 6 7 8`) are also part of the upper annotation line.
+
+Specified that there is mostly one upper annotation line for octaves, talas, and mordents, and sometimes there may be zero upper annotation lines.
+
+Specified that octave markings are not allowed in the letter notation line; they are only permitted in the annotation lines.
+
+Specified that in the main parsing logic, the notation should be structured with newlines to separate the letter line, upper annotation lines, and lower annotation lines. Parsing should begin with the letter line, followed by upper and lower lines. Annotations from the upper and lower lines should then be integrated into the parse tree.
+
+Specified that tokens should not be separated by whitespace during parsing. Token recognition should be independent of spaces.
+
+Conceptualizes the letter line as a structured sequence of:
+- Barlines
+- Whitespace
+- Beats, which contain:
+  - Dashes
+  - Pitches
+  - Slurs
+  - Phrase Marks
+  - Nested pitches and ornaments
+- Slurs
+- Additional Barlines
+
+This hierarchical structure should be reflected in the parsing logic.
+
+Conceptualizes a 'Beat' as a sequence of 'Beat Elements' and a 'Letter Line' as a sequence of 'Line Elements'.
+
+Specified that dashes (`-`) can act as independent beat-like elements when they do not extend a pitch. They should be parsed accordingly in the letter line.
+
+Decided that spaces are not needed as separate elements in the letter line, as they are already used as beat delimiters.
+
+Specified that octave markings and mordents from the annotation lines should be attached to the corresponding pitch in the same column, with a tolerance of plus or minus 1 position.
+
+Specified that Beat Elements do not receive attributes (octave, mordent, lyrics) directly from annotation lines. Annotations remain separate and are not merged into the Beat Elements.
+
+Specified that notes, dashes, and other elements in the letter line can still receive annotations (octaves, mordents, lyrics), but they are not merged directly into Beat Elements. Annotations are attached separately while maintaining the structural separation.
+
+Clarified that the elements of the annotation lines (octaves, mordents, lyrics) should become attributes of the corresponding notes or, in some cases, of the entire line. The attributes should be fully integrated, not just referenced.
+
+Specified that annotations (octaves, mordents, lyrics) apply to top-level elements like pitches, dashes, and barlines, not specifically to Beat Elements.
+
+Wants a web front-end for the project with:
+- A monospaced text area.
+- A WebSocket connection to monitor the text area for changes.
+
+Wants the server endpoint to:
+- Return the parse tree.
+- Generate LilyPond source and return it.
+- Generate and return an SVG of the staff notation (hardcoded for now).
+
+Wants real-time updates for the parse tree, LilyPond source, and SVG representation as the notation is edited in the text area.
+
+
+Delete all
