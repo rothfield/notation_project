@@ -57,3 +57,10 @@ Highlighted musical runs:
 
 ## Summary:
 Your only task is to highlight the musical runs—notes, dashes, and barlines—inside each notation block, while leaving all other content unchanged.
+
+#### ✅ Now, parse this :
+
+[[INPUT]]
+
+```
+```
